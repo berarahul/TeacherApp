@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
+import '../../../../../local_storage/my_storage_controller.dart';
 import '../../../../../models/for_attandance_tab/DepartmentModel.dart';
 import '../../../../../repository/AttendenceDropDownRepository/AttendenceDropDownRepository.dart';
 
@@ -11,12 +12,21 @@ class DepartmentController extends GetxController {
   RxList<DepartmentModel> departments = <DepartmentModel>[].obs;
   // Observable for the selected department ID
   RxInt selectedDepartmentId = 0.obs;
+  var storageController = Get.find<MyStorageController>();
 
   @override
   void onInit() {
     super.onInit();
-    // Fetch departments on initialization
-    fetchDepartments();
+   departmentCheck();
+  }
+
+  void departmentCheck()async{
+    var deps = await storageController.getDepartmentsById();
+    if(deps.isEmpty){
+      fetchDepartments();
+    }else{
+      departments.value = deps;
+    }
   }
 
   // Fetch departments from the API
@@ -35,6 +45,9 @@ class DepartmentController extends GetxController {
         // Clear existing departments and add the parsed list
         departments.clear();
         departments.addAll(departmentModels);
+        departmentModels.forEach((element) {
+          storageController.addDepartment(DepartmentModel(id: element.id, departmentName: element.departmentName, teacherId: storageController.teacherId.value));
+        });
       } else {
         throw Exception('Invalid or empty response from API');
       }

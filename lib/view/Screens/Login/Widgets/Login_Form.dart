@@ -1,3 +1,4 @@
+import 'package:attendence/local_storage/my_storage_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -72,6 +73,7 @@ class Login_form extends StatelessWidget {
               String deptId = deptIdController.text.trim();
 
               Login_Storage_Helper.storeData(teacherId, deptId, context);
+              Get.find<MyStorageController>().storageTeacherId(teacherId);
 
               Get.to(const BottomNavigationMenu());
             },

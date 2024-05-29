@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:attendence/local_storage/my_storage_controller.dart';
 import 'package:attendence/res/Colors/AppColors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +31,10 @@ class AttendanceDropDownScreen extends StatelessWidget {
   final SelectedDepartmentIdStore selectedDepartmentIdStore =
       SelectedDepartmentIdStore();
 
+  final myStorage = Get.find<MyStorageController>();
+
   @override
   Widget build(BuildContext context) {
-    RxList<DepartmentModel> departmentModels = departmentController.departments;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dropdown Example'),
