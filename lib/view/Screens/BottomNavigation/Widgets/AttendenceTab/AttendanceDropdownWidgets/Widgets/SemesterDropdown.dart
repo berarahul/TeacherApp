@@ -18,6 +18,7 @@ class SemesterDropdownWidget extends StatelessWidget {
 
     // Assuming keys in semesterSubjectsMap represent semester IDs
     semesterSubjectsMap.keys.forEach((semesterId) {
+      print(semesterId);
       semesterItems.add(
         DropdownMenuItem<int>(
           value: semesterId,

@@ -17,6 +17,7 @@ class SubjectDropdownWidget extends StatelessWidget {
     List<DropdownMenuItem<Semesterwithsubjectmodel>> subjectItems = [];
 
     subjects.forEach((subject) {
+      print(subject);
       subjectItems.add(
         DropdownMenuItem<Semesterwithsubjectmodel>(
           value: subject,

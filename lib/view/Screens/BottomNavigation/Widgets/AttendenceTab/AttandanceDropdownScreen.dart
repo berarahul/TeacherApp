@@ -65,7 +65,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
               );
             }),
             const SizedBox(height: 20),
-            const Text('Select Semester:'),
+            const Text('Select Semesters:'),
             Obx(() {
               var semesterSubjectsMap =
                   semesterWithSubjectsController.semesterSubjectMap.value.obs;
