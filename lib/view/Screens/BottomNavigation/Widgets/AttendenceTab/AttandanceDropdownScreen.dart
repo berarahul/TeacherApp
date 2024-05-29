@@ -10,7 +10,6 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../../../models/for_attandance_tab/DepartmentModel.dart';
-
 import '../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
 
 import '../../../../../res/components/roundButton.dart';
@@ -48,18 +47,18 @@ class AttendanceDropDownScreen extends StatelessWidget {
               RxList<DepartmentModel> departmentModels =
                   departmentController.departments.value.obs;
               return DepartmentDropdownWidget(
+                key: UniqueKey(),
                 departments: departmentModels,
                 onChanged: (DepartmentModel? value) async {
-                  // Handle department selection here
                   if (value != null) {
-                    // Store the selected department ID
                     selectedDepartmentIdStore.selectedDepartmentId = value.id;
-                    print(
-                        'selected Department id: ${selectedDepartmentIdStore.selectedDepartmentId}');
+                    semesterWithSubjectsController.selectedSemester.value =
+                        ''; // Clear selected semester
+                    semesterWithSubjectsController.selectedSubject.value =
+                        []; // Clear selected subjects
 
                     await semesterWithSubjectsController
                         .fetchSemesterSubjects();
-                    print("hi i am here");
                   }
                 },
               );
@@ -76,7 +75,9 @@ class AttendanceDropDownScreen extends StatelessWidget {
                   if (value != null) {
                     semesterWithSubjectsController
                         .setSelectedSemester(value.toString());
-                    // Update subjects dropdown based on selected semester
+                    semesterWithSubjectsController.selectedSubject.value =
+                        []; // Clear selected subjects
+
                     List<Semesterwithsubjectmodel> subjects =
                         semesterSubjectsMap[value] ?? [];
                     semesterWithSubjectsController.updateSubjects(subjects);
@@ -91,10 +92,9 @@ class AttendanceDropDownScreen extends StatelessWidget {
                   semesterWithSubjectsController.selectedSubject.value.obs;
               return SubjectDropdownWidget(
                 key: UniqueKey(),
-                subjects: subjects, // No need to wrap in obs here
+                subjects: subjects,
                 onChanged: (Semesterwithsubjectmodel? newValue) {
                   if (newValue != null) {
-                    // Handle subject selection here
                     semesterWithSubjectsController
                         .setSelectedSubject(newValue.subjectName);
                   }
