@@ -8,9 +8,10 @@ class DepartmentDropdownWidget extends StatelessWidget {
   final ValueChanged<DepartmentModel?> onChanged;
 
   DepartmentDropdownWidget({
+    Key? key,
     required this.departments,
     required this.onChanged,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,4 +27,3 @@ class DepartmentDropdownWidget extends StatelessWidget {
     );
   }
 }
-
