@@ -20,7 +20,7 @@ class SubjectDropdownWidget extends StatelessWidget {
       print(subject);
       subjectItems.add(
         DropdownMenuItem<Semesterwithsubjectmodel>(
-          value: subject,
+          value: subject as Semesterwithsubjectmodel,
           child: Text(subject.subjectName),
         ),
       );
@@ -34,6 +34,12 @@ class SubjectDropdownWidget extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
 
 
 

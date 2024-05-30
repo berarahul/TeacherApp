@@ -87,7 +87,9 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
                     semesterWithSubjectsController
                         .setSelectedSemester(value.toString());
                     semesterWithSubjectsController.selectedSubject.value =
-                        []; // Clear selected subjects
+                        [];
+
+                    // Clear selected subjects
 
                     List<Semesterwithsubjectmodel> subjects =
                         semesterSubjectsMap[value] ?? [];
@@ -99,7 +101,7 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
             const SizedBox(height: 20),
             const Text('Select Subject:'),
             Obx(() {
-              var subjects = semesterWithSubjectsController.selectedSubject.value;
+              var subjects = semesterWithSubjectsController.selectedSubject.value.obs;
               return SubjectDropdownWidget(
                 key: UniqueKey(),
                 subjects: subjects,
@@ -107,7 +109,7 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
                 onChanged: (Semesterwithsubjectmodel? newValue) {
                   if (newValue != null) {
                     selectedSubjectIdStore.SelectedSubjectId = newValue.subjectId;
-                    semesterWithSubjectsController.setSelectedSubject(newValue.subjectName);
+                    semesterWithSubjectsController.setSelectedSubject(newValue);
                   }
                 },
               );
@@ -121,7 +123,7 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
                   title: 'Submit',
                   onPress: () {
 
-              var student=      AttendanceDropDownRepository.StudentDataFetch();
+              var student= AttendanceDropDownRepository.StudentDataFetch();
                     print(student);
                   },
                   height: 45,

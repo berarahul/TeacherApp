@@ -16,4 +16,8 @@ class Semesterwithsubjectmodel {
       subjectName: json['subjectName'] as String,
     );
   }
+  @override
+  String toString() {
+    return 'Semesterwithsubjectmodel(subjectName: $subjectName, semester: $semester)';
+  }
 }
