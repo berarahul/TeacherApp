@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:attendence/local_storage/my_storage_controller.dart';
 import 'package:attendence/res/Colors/AppColors.dart';
+import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
+import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_subject_id.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,6 +15,7 @@ import 'package:get_storage/get_storage.dart';
 import '../../../../../models/for_attandance_tab/DepartmentModel.dart';
 import '../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
 
+import '../../../../../repository/AttendenceDropDownRepository/AttendenceDropDownRepository.dart';
 import '../../../../../res/components/roundButton.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
@@ -30,7 +33,9 @@ class AttendanceDropDownScreen extends StatelessWidget {
 
   final SelectedDepartmentIdStore selectedDepartmentIdStore =
       SelectedDepartmentIdStore();
+final SelectedSemesterIdStore selectedSemesterIdStore= SelectedSemesterIdStore();
 
+final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
   final myStorage = Get.find<MyStorageController>();
 
   @override
@@ -54,13 +59,15 @@ class AttendanceDropDownScreen extends StatelessWidget {
                 onChanged: (DepartmentModel? value) async {
                   if (value != null) {
                     selectedDepartmentIdStore.selectedDepartmentId = value.id;
+                    print(selectedSemesterIdStore.toString());
                     semesterWithSubjectsController.selectedSemester.value =
                         ''; // Clear selected semester
-                    semesterWithSubjectsController.selectedSubject.value =
-                        []; // Clear selected subjects
+                    semesterWithSubjectsController.selectedSubject.clear();
+                    // semesterWithSubjectsController.selectedSubject.value =
+                    //     []; // Clear selected subjects
 
                     await semesterWithSubjectsController
-                        .fetchSemesterSubjects();
+                        .fetchSemesterSubjects( );
                   }
                 },
               );
@@ -75,6 +82,8 @@ class AttendanceDropDownScreen extends StatelessWidget {
                 semesterSubjectsMap: semesterSubjectsMap,
                 onChanged: (int? value) {
                   if (value != null) {
+
+                    selectedSemesterIdStore.SelectedSemesterId=value;
                     semesterWithSubjectsController
                         .setSelectedSemester(value.toString());
                     semesterWithSubjectsController.selectedSubject.value =
@@ -90,26 +99,31 @@ class AttendanceDropDownScreen extends StatelessWidget {
             const SizedBox(height: 20),
             const Text('Select Subject:'),
             Obx(() {
-              var subjects =
-                  semesterWithSubjectsController.selectedSubject.value.obs;
+              var subjects = semesterWithSubjectsController.selectedSubject.value;
               return SubjectDropdownWidget(
                 key: UniqueKey(),
                 subjects: subjects,
+
                 onChanged: (Semesterwithsubjectmodel? newValue) {
                   if (newValue != null) {
-                    semesterWithSubjectsController
-                        .setSelectedSubject(newValue.subjectName);
+                    selectedSubjectIdStore.SelectedSubjectId = newValue.subjectId;
+                    semesterWithSubjectsController.setSelectedSubject(newValue.subjectName);
                   }
                 },
               );
             }),
+
             const SizedBox(height: 100),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RoundButton(
                   title: 'Submit',
-                  onPress: () {},
+                  onPress: () {
+
+              var student=      AttendanceDropDownRepository.StudentDataFetch();
+                    print(student);
+                  },
                   height: 45,
                   width: 160,
                   buttonColor: AppColors.primaryColor,
@@ -122,3 +136,5 @@ class AttendanceDropDownScreen extends StatelessWidget {
     );
   }
 }
+
+

@@ -49,3 +49,4 @@ class SemesterWithSubjectsController extends GetxController {
     }
   }
 }
+

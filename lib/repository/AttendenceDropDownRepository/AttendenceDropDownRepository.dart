@@ -14,4 +14,10 @@ class AttendanceDropDownRepository {
   }
 
 
+  static Future<dynamic> StudentDataFetch() async {
+
+   dynamic response = await _apiServices.getApi(AppUrl.StudentDataAPiUrl);
+   return response;
+  }
+
 }
