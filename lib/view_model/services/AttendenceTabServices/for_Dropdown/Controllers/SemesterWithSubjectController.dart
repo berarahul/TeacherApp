@@ -70,6 +70,7 @@ class SemesterWithSubjectsController extends GetxController {
   void setSelectedSubject(Semesterwithsubjectmodel? value) {
     if (value != null) {
       selectedSubject.value = [value];
+      print(value);
     } else {
       selectedSubject.value = [];
     }
@@ -77,6 +78,7 @@ class SemesterWithSubjectsController extends GetxController {
 
   void updateSubjects(List<Semesterwithsubjectmodel> subjects) {
     selectedSubject.value = subjects;
+    print(subjects);
   }
 
   Future<void> fetchSemesterSubjects() async {
@@ -86,14 +88,13 @@ class SemesterWithSubjectsController extends GetxController {
       print(response);
       if (response != null && response is List<dynamic>) {
         // Handle potential non-model response
-        List<Semesterwithsubjectmodel> semesterSubjects = response
-            .map((item) =>
+        List<Semesterwithsubjectmodel> semesterSubjects = response.map((item) =>
             Semesterwithsubjectmodel.fromJson(item as Map<String, dynamic>))
             .toList();
 
         // Update the observable map directly with parsed semester subjects
-        semesterSubjectMap.value = semesterSubjects
-            .fold<Map<int, List<Semesterwithsubjectmodel>>>({}, (map, subject) {
+        semesterSubjectMap.value = semesterSubjects.fold<Map<int, List<Semesterwithsubjectmodel>>>({},
+                (map, subject) {
           map[subject.semester] = (map[subject.semester] ?? [])..add(subject);
           return map;
         });

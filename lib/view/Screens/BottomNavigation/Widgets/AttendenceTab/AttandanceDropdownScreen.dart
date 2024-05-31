@@ -59,7 +59,7 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
                 onChanged: (DepartmentModel? value) async {
                   if (value != null) {
                     selectedDepartmentIdStore.selectedDepartmentId = value.id;
-                    print(selectedSemesterIdStore.toString());
+                    print(selectedDepartmentIdStore.toString());
                     semesterWithSubjectsController.selectedSemester.value =
                         ''; // Clear selected semester
                     semesterWithSubjectsController.selectedSubject.clear();
@@ -84,6 +84,7 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
                   if (value != null) {
 
                     selectedSemesterIdStore.SelectedSemesterId=value;
+                    print(selectedSemesterIdStore.toString());
                     semesterWithSubjectsController
                         .setSelectedSemester(value.toString());
                     semesterWithSubjectsController.selectedSubject.value =
@@ -109,6 +110,7 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
                 onChanged: (Semesterwithsubjectmodel? newValue) {
                   if (newValue != null) {
                     selectedSubjectIdStore.SelectedSubjectId = newValue.subjectId;
+                    print(selectedSubjectIdStore.toString());
                     semesterWithSubjectsController.setSelectedSubject(newValue);
                   }
                 },

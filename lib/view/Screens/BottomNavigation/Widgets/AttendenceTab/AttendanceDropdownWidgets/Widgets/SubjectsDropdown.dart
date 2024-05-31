@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 import '../../../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
 
 class SubjectDropdownWidget extends StatelessWidget {
-  final List<Semesterwithsubjectmodel> subjects;
+  final RxList<Semesterwithsubjectmodel> subjects;
   final ValueChanged<Semesterwithsubjectmodel?> onChanged;
 
   const SubjectDropdownWidget({
@@ -29,7 +30,6 @@ class SubjectDropdownWidget extends StatelessWidget {
     return DropdownButtonFormField<Semesterwithsubjectmodel>(
       items: subjectItems,
       onChanged: onChanged,
-
       hint: Text('Select Subject'),
     );
   }

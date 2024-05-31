@@ -44,10 +44,7 @@ class DepartmentController extends GetxController {
   }
 
   // Method to update departments
-  void updateDepartments(List<DepartmentModel> updatedDepartments) {
-    departments.clear();
-    departments.addAll(updatedDepartments);
-  }
+
 
   // Method to update the selected department ID
 
