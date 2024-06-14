@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get.dart';
 
 import '../../../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
 
@@ -15,26 +15,22 @@ class SubjectDropdownWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<DropdownMenuItem<Semesterwithsubjectmodel>> subjectItems = [];
-
-    subjects.forEach((subject) {
-      print(subject);
-      subjectItems.add(
-        DropdownMenuItem<Semesterwithsubjectmodel>(
-          value: subject as Semesterwithsubjectmodel,
+    return Obx(() {
+      List<DropdownMenuItem<Semesterwithsubjectmodel>> subjectItems = subjects.map((subject) {
+        return DropdownMenuItem<Semesterwithsubjectmodel>(
+          value: subject,
           child: Text(subject.subjectName),
-        ),
+        );
+      }).toList();
+
+      return DropdownButtonFormField<Semesterwithsubjectmodel>(
+        items: subjectItems,
+        onChanged: onChanged,
+        hint: Text('Select Subject'),
       );
     });
-
-    return DropdownButtonFormField<Semesterwithsubjectmodel>(
-      items: subjectItems,
-      onChanged: onChanged,
-      hint: Text('Select Subject'),
-    );
   }
 }
-
 
 
 

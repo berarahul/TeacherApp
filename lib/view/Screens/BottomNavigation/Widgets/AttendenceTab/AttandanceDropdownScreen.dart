@@ -4,6 +4,7 @@ import 'package:attendence/local_storage/my_storage_controller.dart';
 import 'package:attendence/res/Colors/AppColors.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_subject_id.dart';
+import 'package:attendence/view_model/services/custom_Loading_service/customLoadingController.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -21,6 +22,7 @@ import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/At
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
 
+import 'AttandanceTakenScreen.dart';
 import 'AttendanceDropdownWidgets/Widgets/DepartmentDropdown.dart';
 import 'AttendanceDropdownWidgets/Widgets/SemesterDropdown.dart';
 import 'AttendanceDropdownWidgets/Widgets/SubjectsDropdown.dart';
@@ -59,6 +61,7 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
                 onChanged: (DepartmentModel? value) async {
                   if (value != null) {
                     selectedDepartmentIdStore.selectedDepartmentId = value.id;
+                    print("Selected Department id::${selectedDepartmentIdStore.selectedDepartmentId}");
                     print(selectedDepartmentIdStore.toString());
                     semesterWithSubjectsController.selectedSemester.value =
                         ''; // Clear selected semester
@@ -84,6 +87,7 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
                   if (value != null) {
 
                     selectedSemesterIdStore.SelectedSemesterId=value;
+                    print("selected semester id::${selectedSemesterIdStore.SelectedSemesterId}");
                     print(selectedSemesterIdStore.toString());
                     semesterWithSubjectsController
                         .setSelectedSemester(value.toString());
@@ -110,6 +114,7 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
                 onChanged: (Semesterwithsubjectmodel? newValue) {
                   if (newValue != null) {
                     selectedSubjectIdStore.SelectedSubjectId = newValue.subjectId;
+                    print("selected subject id::${selectedSubjectIdStore.SelectedSubjectId}");
                     print(selectedSubjectIdStore.toString());
                     semesterWithSubjectsController.setSelectedSubject(newValue);
                   }
@@ -123,10 +128,11 @@ final SelectedSubjectIdStore selectedSubjectIdStore= SelectedSubjectIdStore();
               children: [
                 RoundButton(
                   title: 'Submit',
-                  onPress: () {
+                  onPress: ()  {
 
-              var student= AttendanceDropDownRepository.StudentDataFetch();
-                    print(student);
+                    LoadingController.showLoading();
+                    Get.to(() => AttendanceTakenScreen());
+
                   },
                   height: 45,
                   width: 160,

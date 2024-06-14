@@ -1,29 +1,36 @@
+import 'package:attendence/repository/AttendenceDropDownRepository/AttendenceDropDownRepository.dart';
+import 'package:attendence/view_model/services/custom_Loading_service/customLoadingController.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+
+import '../../../../../models/for_attandance_tab/StudentData/StudentDataModel.dart';
 
 class AttendanceController extends GetxController {
-  var students = <Student>[].obs;
+  var students = <StudentDataModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Fetch students from API or define them here
-    students.addAll([
-      Student(name: 'John Doe', rollNumber: 1),
-      Student(name: 'Jane Smith', rollNumber: 2),
-      // Add more students as needed
-    ]);
+    fetchStudents();
+  }
+
+  Future<void> fetchStudents() async {
+    try {
+      LoadingController.showLoading();
+      var response = await AttendanceDropDownRepository.StudentDataFetch();
+      List<StudentDataModel> fetchedStudents = (response as List)
+          .map((data) => StudentDataModel.fromJson(data))
+          .toList();
+      students.assignAll(fetchedStudents);
+    } catch (e) {
+      print("Error fetching students: $e");
+    } finally {
+      LoadingController.hideLoading();
+    }
   }
 
   void toggleAttendance(int index) {
     students[index].isPresent = !students[index].isPresent;
+    print(index);
+    students.refresh(); // Refresh to update the UI
   }
-}
-
-class Student {
-  String name;
-  int rollNumber;
-  bool isPresent = false;
-
-  Student({required this.name, required this.rollNumber});
 }

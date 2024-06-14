@@ -5,6 +5,8 @@ import 'package:attendence/view/Screens/BottomNavigation/Widgets/AttendenceTab/A
 import 'package:attendence/view/Screens/BottomNavigation/Widgets/StudentTab/StudentDropDownScreen.dart';
 import 'package:attendence/view/Screens/Login/Login_View.dart';
 import 'package:attendence/view/Screens/OnBoarding/OnBoarding_View.dart';
+import 'package:attendence/view/Screens/constant/AttendanceSuccessFully.dart';
+import 'package:attendence/view/Screens/constant/Custom_Loading_widgets.dart';
 import 'package:attendence/view/splash.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
 import 'package:attendence/view_model/services/On_Boarding_Services/hasSeenOnboarding.dart';
@@ -33,11 +35,8 @@ class MyApp extends StatelessWidget {
        translations: Launguage(),
        locale: Locale('en','US'),
        fallbackLocale: Locale('en','US'),
+       // home: GlobalLoadingWidget(),
        home:   hasSeenOnboarding ? LoginScreen() : OnBoardingScreen(),
-      // home: Attandancetakenscreen(),
-      // home: SemesterWithSubjectsController();
-
-       // getPages: [AppRoutes.appRoutes()],
 
      );
 

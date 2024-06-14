@@ -1,12 +1,8 @@
-
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
-
 import '../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
 import '../../view_model/services/Login_Services/Login_Helper_Function/Login_Storage_Helper.dart';
-
 class AppUrl {
   static const String baseurl = "https://attendancesystem-s1.onrender.com";
-
   static String get departmentApiUrl {
     String teacherId = Login_Storage_Helper.retrieveTeacherId() ??
         ""; // Get teacherId from Login_Storage_Helper
@@ -23,8 +19,11 @@ class AppUrl {
 static String  get StudentDataAPiUrl{
 
   int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
-  SelectedSemesterIdStore semesterId=SelectedSemesterIdStore().SelectedSemesterId as SelectedSemesterIdStore;
+  int semesterId=SelectedSemesterIdStore().SelectedSemesterId as int ;
   return "$baseurl/api/student/$departmentId/$semesterId";
 }
+  static String get takeAttendanceDataAPiUrl {
+    return "$baseurl/api/attendance/create";
+  }
 
 }
