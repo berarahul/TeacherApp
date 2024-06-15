@@ -6,18 +6,12 @@ import '../../../../../models/for_attandance_tab/DepartmentModel.dart';
 import '../../../../../repository/AttendenceDropDownRepository/AttendenceDropDownRepository.dart';
 
 
-class DepartmentController extends GetxController {
+ class DepartmentController extends GetxController {
   // Observable list of department models
   RxList<DepartmentModel> departments = <DepartmentModel>[].obs;
   // Observable for the selected department ID
   RxInt selectedDepartmentId = 0.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Fetch departments on initialization
-    fetchDepartments();
-  }
 
   // Fetch departments from the API
   Future<void> fetchDepartments() async {

@@ -1,36 +1,54 @@
 import 'package:attendence/repository/AttendenceDropDownRepository/AttendenceDropDownRepository.dart';
+import 'package:attendence/utils/logging/logger.dart';
 import 'package:attendence/view_model/services/custom_Loading_service/customLoadingController.dart';
 import 'package:get/get.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../../../../models/for_attandance_tab/StudentData/StudentDataModel.dart';
 
 class AttendanceController extends GetxController {
   var students = <StudentDataModel>[].obs;
-
+bool studentflag=false;
   @override
   void onInit() {
     super.onInit();
-    fetchStudents();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      fetchStudents();
+      studentflag=true;
+    });
   }
 
   Future<void> fetchStudents() async {
     try {
-      LoadingController.showLoading();
+
       var response = await AttendanceDropDownRepository.StudentDataFetch();
-      List<StudentDataModel> fetchedStudents = (response as List)
-          .map((data) => StudentDataModel.fromJson(data))
-          .toList();
-      students.assignAll(fetchedStudents);
+      if (response is List) {
+        List<StudentDataModel> fetchedStudents = response.map((data) => StudentDataModel.fromJson(data)).toList();
+        // Use `assignAll` within a SchedulerBinding to delay the update
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          students.assignAll(fetchedStudents);
+          print(response);
+
+        });
+      } else {
+        throw Exception("Invalid response format");
+      }
     } catch (e) {
+      // Use a proper logging method instead of print
+      RLoggerHelper.error("Error fetching students", e);
       print("Error fetching students: $e");
     } finally {
-      LoadingController.hideLoading();
+
     }
   }
 
   void toggleAttendance(int index) {
-    students[index].isPresent = !students[index].isPresent;
-    print(index);
-    students.refresh(); // Refresh to update the UI
+    if (index >= 0 && index < students.length) {
+      students[index].isPresent = !students[index].isPresent;
+      students.refresh(); // Refresh to update the UI
+    } else {
+      // Log invalid index access attempt
+      print("Invalid index: $index");
+    }
   }
 }

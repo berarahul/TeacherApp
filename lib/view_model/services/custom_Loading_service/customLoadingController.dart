@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
      class LoadingController extends GetxController {
- static  var isLoading = true.obs;
+ static  var isLoading = false.obs;
 
   static void showLoading() {
     isLoading.value = true;

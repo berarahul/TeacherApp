@@ -15,7 +15,7 @@ class GlobalLoadingWidget extends StatelessWidget {
         return SizedBox.shrink();
       }
       return Container(
-        color: Colors.red,
+        color: Colors.blue,
         child: Center(
           child: CircularProgressIndicator(),
         ),

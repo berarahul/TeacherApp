@@ -1,4 +1,6 @@
 import 'package:attendence/local_storage/my_storage_controller.dart';
+import 'package:attendence/view/Screens/constant/Custom_Loading_widgets.dart';
+import 'package:attendence/view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/AttandanceTakenScreenController.dart';
 import 'package:attendence/view_model/services/custom_Loading_service/customLoadingController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,7 +30,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
   final SelectedSubjectIdStore selectedSubjectIdStore =
       SelectedSubjectIdStore();
   final myStorage = Get.find<MyStorageController>();
-
+final AttendanceController attendanceController= Get.put(AttendanceController());
   @override
   Widget build(BuildContext context) {
     RxList<DepartmentModel> departmentModels = departmentController.departments;
@@ -51,8 +53,11 @@ class AttendanceDropDownScreen extends StatelessWidget {
                   print(
                       "Selected Department id::${selectedDepartmentIdStore.selectedDepartmentId}");
                   print(selectedDepartmentIdStore.toString());
-                  semesterWithSubjectsController.selectedSubject.value = null;
+
+                  // semesterWithSubjectsController.selectedSubject.value = null;
                   await semesterWithSubjectsController.fetchSemesterSubjects();
+
+                  // await departmentController.fetchDepartments();
                 }
               },
             ),
@@ -112,9 +117,18 @@ class AttendanceDropDownScreen extends StatelessWidget {
               children: [
                 RoundButton(
                   title: 'Submit',
-                  onPress: () {
-                    LoadingController.showLoading();
-                    Get.to(() => AttendanceTakenScreen());
+                  onPress: ()   {
+                    LoadingController.showLoading(); // Show loading indicator
+
+                    // Simulate a task with a delay
+                    Future.delayed(Duration(seconds: 2), () {
+                      LoadingController.hideLoading(); // Hide loading indicator
+
+                      // Navigate to AttendanceTakenScreen if the student flag is true
+                      if (attendanceController.studentflag == true) {
+                        Get.to(() => AttendanceTakenScreen());
+                      }
+                    });
                   },
                   height: 45,
                   width: 160,
@@ -128,3 +142,5 @@ class AttendanceDropDownScreen extends StatelessWidget {
     );
   }
 }
+
+
