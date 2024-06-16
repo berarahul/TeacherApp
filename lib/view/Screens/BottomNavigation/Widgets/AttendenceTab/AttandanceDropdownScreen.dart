@@ -1,22 +1,22 @@
 import 'package:attendence/local_storage/my_storage_controller.dart';
-import 'package:attendence/view/Screens/constant/Custom_Loading_widgets.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/AttandanceTakenScreenController.dart';
 import 'package:attendence/view_model/services/custom_Loading_service/customLoadingController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../../models/for_attandance_tab/DepartmentModel.dart';
 import '../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
-import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
-import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
+import '../../../../../res/Colors/AppColors.dart';
+import '../../../../../res/components/roundButton.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_subject_id.dart';
-import '../../../../../res/components/roundButton.dart';
-import '../../../../../res/Colors/AppColors.dart';
+import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
+import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
+import 'AttandanceTakenScreen.dart';
 import 'AttendanceDropdownWidgets/Widgets/DepartmentDropdown.dart';
 import 'AttendanceDropdownWidgets/Widgets/SemesterDropdown.dart';
 import 'AttendanceDropdownWidgets/Widgets/SubjectsDropdown.dart';
-import 'AttandanceTakenScreen.dart';
 
 class AttendanceDropDownScreen extends StatelessWidget {
   final DepartmentController departmentController =
@@ -30,7 +30,8 @@ class AttendanceDropDownScreen extends StatelessWidget {
   final SelectedSubjectIdStore selectedSubjectIdStore =
       SelectedSubjectIdStore();
   final myStorage = Get.find<MyStorageController>();
-final AttendanceController attendanceController= Get.put(AttendanceController());
+  final AttendanceController attendanceController =
+      Get.put(AttendanceController());
   @override
   Widget build(BuildContext context) {
     RxList<DepartmentModel> departmentModels = departmentController.departments;
@@ -97,7 +98,9 @@ final AttendanceController attendanceController= Get.put(AttendanceController())
                           []);
               return SubjectDropdownWidget(
                 key: UniqueKey(),
-                subjects: subjects.value,
+                subjects: semesterWithSubjectsController.selectedSemester == 0
+                    ? []
+                    : subjects,
                 selectedSubject: semesterWithSubjectsController.selectedSubject,
                 onChanged: (Semesterwithsubjectmodel? newValue) {
                   if (newValue != null) {
@@ -117,7 +120,7 @@ final AttendanceController attendanceController= Get.put(AttendanceController())
               children: [
                 RoundButton(
                   title: 'Submit',
-                  onPress: ()   {
+                  onPress: () {
                     LoadingController.showLoading(); // Show loading indicator
 
                     // Simulate a task with a delay
@@ -142,5 +145,3 @@ final AttendanceController attendanceController= Get.put(AttendanceController())
     );
   }
 }
-
-

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:attendence/repository/AttendenceDropDownRepository/AttendenceDropDownRepository.dart';
 import 'package:get/get.dart';
 import '../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
@@ -5,7 +7,7 @@ import '../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
 class SemesterWithSubjectsController extends GetxController {
   var semesterSubjectMap = <int, List<Semesterwithsubjectmodel>>{}.obs;
   var selectedSubject = Rx<Semesterwithsubjectmodel?>(null);
-  final selectedSemester = "1".obs;
+  final selectedSemester = "0".obs;
 
   void setSelectedSemester(String value) {
     selectedSemester.value = value;
@@ -44,6 +46,7 @@ class SemesterWithSubjectsController extends GetxController {
           },
         );
         print(semesterSubjectMap);
+        log(semesterSubjectMap.toString());
       } else {
         print("Invalid response from API");
       }
