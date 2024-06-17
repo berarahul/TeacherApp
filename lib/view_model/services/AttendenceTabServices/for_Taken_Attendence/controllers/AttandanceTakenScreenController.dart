@@ -9,12 +9,13 @@ import '../../../../../models/for_attandance_tab/StudentData/StudentDataModel.da
 
 class AttendanceController extends GetxController {
   var students = <StudentDataModel>[].obs;
-  var studentflag = false.obs; // Changed to an observable
+   var studentflag = false.obs; // Changed to an observable
 
   @override
   void onInit() {
     super.onInit();
     SchedulerBinding.instance.addPostFrameCallback((_) {
+      log("Before fetching students: ${studentflag.value}");
       fetchStudents();
     });
   }
@@ -24,22 +25,18 @@ class AttendanceController extends GetxController {
       var response = await AttendanceDropDownRepository.StudentDataFetch();
       if (response is List) {
         List<StudentDataModel> fetchedStudents =
-            response.map((data) => StudentDataModel.fromJson(data)).toList();
-        // Use `assignAll` within a SchedulerBinding to delay the update
+        response.map((data) => StudentDataModel.fromJson(data)).toList();
         SchedulerBinding.instance.addPostFrameCallback((_) {
           students.assignAll(fetchedStudents);
           studentflag.value = true; // Update the flag here
-          log(response.toString());
+          log("Students fetched and flag updated: ${students.length}");
         });
       } else {
         throw Exception("Invalid response format");
       }
     } catch (e) {
-      // Use a proper logging method instead of print
       RLoggerHelper.error("Error fetching students: $e");
-      print("Error fetching students: $e");
-    } finally {
-      // Any final actions if needed
+      log("Error fetching students: $e");
     }
   }
 
@@ -48,8 +45,13 @@ class AttendanceController extends GetxController {
       students[index].isPresent = !students[index].isPresent;
       students.refresh(); // Refresh to update the UI
     } else {
-      // Log invalid index access attempt
-      print("Invalid index: $index");
+      log("Invalid index: $index");
     }
+  }
+
+  void resetState() {
+    students.clear();
+    studentflag.value = false;
+    log("State reset done");
   }
 }

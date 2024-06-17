@@ -1,22 +1,25 @@
+import 'dart:developer';
+
 import 'package:attendence/local_storage/my_storage_controller.dart';
+import 'package:attendence/utils/logging/logger.dart';
+import 'package:attendence/view/Screens/constant/Custom_Loading_widgets.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/AttandanceTakenScreenController.dart';
 import 'package:attendence/view_model/services/custom_Loading_service/customLoadingController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../../models/for_attandance_tab/DepartmentModel.dart';
 import '../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
-import '../../../../../res/Colors/AppColors.dart';
-import '../../../../../res/components/roundButton.dart';
+import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
+import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_subject_id.dart';
-import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
-import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
-import 'AttandanceTakenScreen.dart';
+import '../../../../../res/components/roundButton.dart';
+import '../../../../../res/Colors/AppColors.dart';
 import 'AttendanceDropdownWidgets/Widgets/DepartmentDropdown.dart';
 import 'AttendanceDropdownWidgets/Widgets/SemesterDropdown.dart';
 import 'AttendanceDropdownWidgets/Widgets/SubjectsDropdown.dart';
+import 'AttandanceTakenScreen.dart';
 
 class AttendanceDropDownScreen extends StatelessWidget {
   final DepartmentController departmentController =
@@ -30,8 +33,11 @@ class AttendanceDropDownScreen extends StatelessWidget {
   final SelectedSubjectIdStore selectedSubjectIdStore =
       SelectedSubjectIdStore();
   final myStorage = Get.find<MyStorageController>();
-  final AttendanceController attendanceController =
-      Get.put(AttendanceController());
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     RxList<DepartmentModel> departmentModels = departmentController.departments;
@@ -54,6 +60,8 @@ class AttendanceDropDownScreen extends StatelessWidget {
                   print(
                       "Selected Department id::${selectedDepartmentIdStore.selectedDepartmentId}");
                   print(selectedDepartmentIdStore.toString());
+
+
 
                   // semesterWithSubjectsController.selectedSubject.value = null;
                   await semesterWithSubjectsController.fetchSemesterSubjects();
@@ -82,6 +90,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
                     List<Semesterwithsubjectmodel> subjects =
                         semesterSubjectsMap[value] ?? [];
                     semesterWithSubjectsController.updateSubjects(subjects);
+
                   }
                 },
               );
@@ -98,9 +107,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
                           []);
               return SubjectDropdownWidget(
                 key: UniqueKey(),
-                subjects: semesterWithSubjectsController.selectedSemester == 0
-                    ? []
-                    : subjects,
+                subjects: subjects.value,
                 selectedSubject: semesterWithSubjectsController.selectedSubject,
                 onChanged: (Semesterwithsubjectmodel? newValue) {
                   if (newValue != null) {
@@ -120,19 +127,37 @@ class AttendanceDropDownScreen extends StatelessWidget {
               children: [
                 RoundButton(
                   title: 'Submit',
-                  onPress: () {
-                    LoadingController.showLoading(); // Show loading indicator
+                  onPress: ()  async {
 
-                    // Simulate a task with a delay
-                    Future.delayed(Duration(seconds: 2), () {
-                      LoadingController.hideLoading(); // Hide loading indicator
+                    final AttendanceController attendanceController = Get.put(AttendanceController());
+                    log("Submit button pressed. studentflag: ${attendanceController.studentflag.value}");
 
-                      // Navigate to AttendanceTakenScreen if the student flag is true
-                      if (attendanceController.studentflag == true) {
-                        Get.to(() => AttendanceTakenScreen());
-                      }
-                    });
+                    // Reset the state before fetching new data
+                    attendanceController.resetState();
+
+                    // Show loading
+                    LoadingController.showLoading();
+
+                    // Using Future.delayed for a 2-second delay
+                    await Future.delayed(Duration(seconds: 2));
+
+                    // Fetch students
+                    await attendanceController.fetchStudents();
+
+                    // Navigate based on the flag value
+                    if (attendanceController.studentflag.value) {
+                      log("Navigating to AttendanceTakenScreen");
+                      Get.to(() => AttendanceTakenScreen());
+                    } else {
+                      log("Students not fetched yet or some issue occurred.");
+                      // Show an error or handle the state accordingly
+                    }
+
+                    // Hide loading
+                    LoadingController.hideLoading();
+
                   },
+
                   height: 45,
                   width: 160,
                   buttonColor: AppColors.primaryColor,
@@ -145,3 +170,10 @@ class AttendanceDropDownScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+

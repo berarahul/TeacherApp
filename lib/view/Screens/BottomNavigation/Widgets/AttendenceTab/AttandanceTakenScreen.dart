@@ -1,4 +1,5 @@
 import 'package:attendence/res/AppUrl/AppUrl.dart';
+import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../repository/AttendenceDropDownRepository/AttendenceDropDownRepository.dart';
@@ -14,10 +15,13 @@ import '../../../constant/AttendanceSuccessFully.dart';
 
   void handleSubmit() async {
     // Gather data
-    int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
-    int semesterId = SelectedSemesterIdStore().SelectedSemesterId;
-    int subjectId = SelectedSubjectIdStore().SelectedSubjectId;
 
+    int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
+    print(departmentId);
+    int semesterId = SelectedSemesterIdStore().SelectedSemesterId;
+    print(semesterId);
+    int subjectId = SelectedSubjectIdStore().SelectedSubjectId;
+print(subjectId);
     Map<String, dynamic> data = {
       "deptId": departmentId,
       "semId": semesterId,
