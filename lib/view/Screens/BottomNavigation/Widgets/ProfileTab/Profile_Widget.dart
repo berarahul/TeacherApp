@@ -1,78 +1,74 @@
-import 'package:attendence/res/Colors/AppColors.dart';
-import 'package:attendence/res/components/roundButton.dart';
-import 'package:attendence/utils/constants/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-class ProfilePage extends StatelessWidget {
+class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {
+              // Handle more button pressed
+            },
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              padding: EdgeInsets.all(16.0),
-              child: const Row(
-                children: [
-                  Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage(
-                            'assets/avatar.jpg'), // Replace with your asset image path
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 16.0), // Add some space between columns
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'BCA',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Partha Mondal',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: AssetImage('assets/avatar.jpg'), // Replace with your asset image path
             ),
-            Expanded(child: Container()), // To push the buttons to the bottom
-          ],
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(height: 24),
+            Text(
+              'Mr. Surjya Kanta Ghosh',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text('Joined in 2017 | Dept : BCA'),
+            SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                RoundButton(
-                  title: 'Settings',
-                  onPress: () {},
-                  width: 120,
-                  height: 40,
-                  buttonColor: RColors.GreenColor,
-                  textColor: Colors.black,
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle edit profile button pressed
+                  },
+                  child: Text('Edit Profile'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black, backgroundColor: Colors.grey.shade300,
+                  ),
                 ),
-                RoundButton(
-                  title: 'Logout',
-                  onPress: () {},
-                  width: 120,
-                  height: 40,
-                  buttonColor: AppColors.redColor,
-                  textColor: AppColors.textPrimary,
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle settings button pressed
+                  },
+                  child: Text('Settings'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, backgroundColor: Colors.blue.shade700,
+                  ),
                 ),
               ],
             ),
-          ),
+            SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () {
+                // Handle log out button pressed
+              },
+              icon: Icon(Icons.logout),
+              label: Text('Log out'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.black, backgroundColor: Colors.grey.shade300,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:attendence/res/AppUrl/AppUrl.dart';
+import 'package:attendence/view/Screens/constant/dataNotfoundScreen.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,44 +8,49 @@ import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/At
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_subject_id.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/AttandanceTakenScreenController.dart';
+import '../../../../../view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/attandancesubmitcontroller.dart';
 import '../../../constant/AttendanceSuccessFully.dart';
 
-  class AttendanceTakenScreen extends StatelessWidget {
+class AttendanceTakenScreen extends StatelessWidget {
   final AttendanceController controller = Get.put(AttendanceController());
+  final AttendanceSubmitController submitController = Get.put(
+      AttendanceSubmitController());
   List<int> selectedRollNumbers = [];
 
-  void handleSubmit() async {
+  Future<bool> handleSubmit() async {
     // Gather data
-
     int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
-    print(departmentId);
     int semesterId = SelectedSemesterIdStore().SelectedSemesterId;
-    print(semesterId);
     int subjectId = SelectedSubjectIdStore().SelectedSubjectId;
-print(subjectId);
+    List<int> rolls = selectedRollNumbers;
+
     Map<String, dynamic> data = {
       "deptId": departmentId,
       "semId": semesterId,
       "subjectId": subjectId,
-      "rolls": selectedRollNumbers
+      "rolls": rolls
     };
-
-    // Get the API URL
-    String apiUrl = AppUrl.takeAttendanceDataAPiUrl;
-    print(apiUrl);
-
     // Call the API to submit the data
     try {
       var response = await AttendanceDropDownRepository.takeAttendanceData(data);
-      print(response);
-      // Handle success, show message or navigate
+      print("Response status code: ${response['statusCode']}");
+      print("Response status message: ${response['statusMsg']}");
+      if (response['statusCode'] == "201" &&
+          response['statusMsg'] != null &&
+          response['statusMsg'].toString().contains('Attendance created successfully')) {
+        print("Submission successful");
+        return true;
+      }
+
+      else {
+        print("Submission failed: Unexpected response");
+        return false;
+      }
     } catch (e) {
-      // Handle error, show message
       print('Error: $e');
+      return false;
     }
   }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,19 +70,22 @@ print(subjectId);
               title: Text(controller.students[index].name),
               subtitle:
               Text('Roll No: ${controller.students[index].rollNumber}'),
-              trailing: Obx(() => Checkbox(
-                value: controller.students[index].isPresent,
-                onChanged: (bool? value) {
-                  controller.toggleAttendance(index);
+              trailing: Obx(() =>
+                  Checkbox(
+                    value: controller.students[index].isPresent,
+                    onChanged: (bool? value) {
+                      controller.toggleAttendance(index);
 
-                  if (value != null && value) {
-                    selectedRollNumbers.add(controller.students[index].rollNumber);
-                  } else {
-                    selectedRollNumbers.remove(controller.students[index].rollNumber);
-                  }
-                },
-                activeColor: Colors.blue,
-              )),
+                      if (value != null && value) {
+                        selectedRollNumbers.add(
+                            controller.students[index].rollNumber);
+                      } else {
+                        selectedRollNumbers.remove(
+                            controller.students[index].rollNumber);
+                      }
+                    },
+                    activeColor: Colors.blue,
+                  )),
             );
           },
         );
@@ -86,23 +95,40 @@ print(subjectId);
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: EdgeInsets.all(8.0),
-          child: TextButton(
-            onPressed: ()  {
-              // Handle submit action
-              handleSubmit();
-              Get.to(Attendancesuccessfully());
-            },
-            child: Text('Submit'),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Theme.of(context).primaryColor,
-              disabledForegroundColor: Colors.grey.withOpacity(0.38),
-            ),
-          ),
+          child: Obx(() {
+            return TextButton(
+              onPressed: submitController.isSubmitting.value ? null : () async {
+                if (submitController.isSubmitting.value)
+                  return; // Prevent duplicate calls
+                submitController.setSubmitting(true);
+                print("Submit button pressed");
+                bool success = await handleSubmit();
+                print("Submission result: $success");
+                if (success) {
+                  print("Navigating to AttendanceSuccessFully screen");
+                  Get.to(() => Attendancesuccessfully());
+                } else {
+                  print("Navigating to DataNotFoundScreen");
+                  Get.to(() => DataNotFoundScreen());
+                }
+                submitController.setSubmitting(false);
+              },
+              child: submitController.isSubmitting.value
+                  ? CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+                  : Text('Submit'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Theme
+                    .of(context)
+                    .primaryColor,
+                disabledForegroundColor: Colors.grey.withOpacity(0.38),
+              ),
+            );
+          }),
         ),
       ),
     );
-
-
   }
 }

@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-
+import '../../../../res/components/roundButton.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/constants/texts_String.dart';
 import '../../../../view_model/services/Login_Services/Login_Helper_Function/Login_Storage_Helper.dart';
+import '../../../../view_model/services/Login_Services/login_controller.dart';
 import '../../BottomNavigation/Bottom_Navigation_Menu.dart';
 
 class Login_form extends StatelessWidget {
@@ -22,6 +23,8 @@ class Login_form extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loginController = Get.put(LoginController());
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -36,13 +39,22 @@ class Login_form extends StatelessWidget {
         const SizedBox(height: RSizes.spacebtwInputFields),
 
         // Password TextFormField
-        TextFormField(
-          controller: deptIdController,
-          obscureText: true,
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Iconsax.key),
-            labelText: RTexts.password,
-            suffixIcon: Icon(Iconsax.eye_slash),
+        Obx(
+          () => TextFormField(
+            controller: deptIdController,
+            obscureText: loginController.obscureText.value,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Iconsax.key),
+              labelText: RTexts.password,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  loginController.obscureText.value
+                      ? Iconsax.eye_slash
+                      : Iconsax.eye,
+                ),
+                onPressed: loginController.togglePasswordVisibility,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: RSizes.xl),
@@ -64,24 +76,27 @@ class Login_form extends StatelessWidget {
 
         // Sign In Button
         SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () async {
-              // Store teacherId and deptId in local storage
+            width: double.infinity,
+            child: Obx(() {
+              return RoundButton(
+                height: 45,
+                title: 'Login',
+                loading: loginController.isLoading.value,
+                onPress: () async {
+                  loginController.setLoading(true);
+                  await Future.delayed(Duration(seconds: 2));
 
-              String teacherId = teacherIdController.text.trim();
-              String deptId = deptIdController.text.trim();
-
-              Login_Storage_Helper.storeData(teacherId, deptId, context);
-              Get.find<MyStorageController>().storageTeacherId(teacherId);
-
-              Get.to(const BottomNavigationMenu());
-            },
-            child: const Text(RTexts.Login),
-          ),
-        ),
+                  String teacherId = teacherIdController.text.trim();
+                  String deptId = deptIdController.text.trim();
+                  Login_Storage_Helper.storeData(teacherId, deptId, context);
+                  Get.find<MyStorageController>().storageTeacherId(teacherId);
+                  loginController.setLoading(false);
+                  Get.to(const BottomNavigationMenu());
+                },
+                width: 160,
+              );
+            })),
       ],
     );
   }
 }
-

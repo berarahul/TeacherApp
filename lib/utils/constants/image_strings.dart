@@ -1,8 +1,8 @@
 class RImages{
 
   // -- App Logo
-  static const String darkAppLogo="assets/LOGOS/fordarkmode.png";
-  static const String LightAppLogo="assets/LOGOS/forlightmode.jpeg";
+  static const String darkAppLogo="assets/LOGOS/dark.png";
+  static const String LightAppLogo="assets/LOGOS/light.png";
 
 
 

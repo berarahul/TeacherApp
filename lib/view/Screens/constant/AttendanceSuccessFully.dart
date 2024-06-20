@@ -8,6 +8,8 @@ import '../BottomNavigation/Bottom_Navigation_Menu.dart';
 class Attendancesuccessfully extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final BottomNavigationController bottomNavController = Get.find<BottomNavigationController>();
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -29,10 +31,10 @@ class Attendancesuccessfully extends StatelessWidget {
             // To add some space between the text and the button
             ElevatedButton(
               onPressed: () {
-
-                Get.to(BottomNavigationMenu());
+                bottomNavController.selectedIndex.value = 0; // Set index to 0
+                Get.off(() => BottomNavigationMenu());
               },
-              child: Text('GO BACK TO Attendance'),
+              child: Text('GO BACK TO Home'),
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white, backgroundColor: Colors.purple,
               ),

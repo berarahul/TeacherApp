@@ -25,5 +25,8 @@ static String  get StudentDataAPiUrl{
   static String get takeAttendanceDataAPiUrl {
     return "$baseurl/api/attendance/create";
   }
+   static String get studentTabDepartmentApiUrl{
 
+    return "$baseurl/api/dept/all";
+   }
 }

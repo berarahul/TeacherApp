@@ -1,30 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-
-import '../../../../../../../models/for_attandance_tab/DepartmentModel.dart';
+import 'package:get/get.dart';
 import '../../../../../../../models/for_student_tab/Department_Model.dart';
+import '../../../../../../../view_model/services/StudentTabServices/for_Student_list/controllers/studentTabDepartmentController.dart';
 
-class StudentTabDepartmentDropdownWidget extends StatelessWidget {
-  final RxList<studenttabDepartmentModel> departments;
-  final ValueChanged<studenttabDepartmentModel?> onChanged;
 
-  StudentTabDepartmentDropdownWidget({
-    required this.departments,
-    required this.onChanged,
-  });
+class StudentTabDepartmentDropdownWidgets extends StatelessWidget {
+  final StudentTabDepartmentController departmentController = Get.put(StudentTabDepartmentController());
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<studenttabDepartmentModel>(
-      items: departments.map((department) {
-        return DropdownMenuItem<studenttabDepartmentModel>(
-          value: department,
-          child: Text(department.departmentName),
+    return Obx(() {
+      if (departmentController.isLoading.value) {
+        return Center(child: CircularProgressIndicator());
+      } else if (departmentController.departments.isEmpty) {
+        return Center(child: Text('No departments available'));
+      } else {
+        return DropdownButtonFormField<studenttabDepartmentModel>(
+          value: departmentController.selectedDepartment.value.id == 0
+              ? null
+              : departmentController.selectedDepartment.value,
+          items: departmentController.departments
+              .map((department) => DropdownMenuItem<studenttabDepartmentModel>(
+            value: department,
+            child: Text(department.departmentName),
+          ))
+              .toList(),
+          onChanged: (value) {
+            if (value != null) {
+              departmentController.setSelectedDepartment(value);
+            }
+          },
+          decoration: InputDecoration(
+            labelText: 'Select Department',
+            border: OutlineInputBorder(),
+          ),
         );
-      }).toList(),
-      onChanged: onChanged,
-      hint: Text('Select Department'),
-    );
+      }
+    });
   }
 }
-

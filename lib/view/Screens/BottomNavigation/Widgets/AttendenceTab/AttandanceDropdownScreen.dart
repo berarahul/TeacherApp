@@ -1,14 +1,11 @@
 import 'dart:developer';
-
 import 'package:attendence/local_storage/my_storage_controller.dart';
-import 'package:attendence/utils/logging/logger.dart';
-import 'package:attendence/view/Screens/constant/Custom_Loading_widgets.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/AttandanceTakenScreenController.dart';
-import 'package:attendence/view_model/services/custom_Loading_service/customLoadingController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../models/for_attandance_tab/DepartmentModel.dart';
 import '../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
+import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/AttendanceDropDownScreenController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
@@ -33,13 +30,14 @@ class AttendanceDropDownScreen extends StatelessWidget {
   final SelectedSubjectIdStore selectedSubjectIdStore =
       SelectedSubjectIdStore();
   final myStorage = Get.find<MyStorageController>();
-
-
-
-
-
+  final AttendanceDropDownScreenController attendancedropDownScreenController =
+      Get.put(AttendanceDropDownScreenController());
+  // Ensure this is only called once in your app
+  final AttendanceController attendanceController = Get.put(
+      AttendanceController());
   @override
   Widget build(BuildContext context) {
+
     RxList<DepartmentModel> departmentModels = departmentController.departments;
     return Scaffold(
       appBar: AppBar(
@@ -57,16 +55,8 @@ class AttendanceDropDownScreen extends StatelessWidget {
               onChanged: (DepartmentModel? value) async {
                 if (value != null) {
                   selectedDepartmentIdStore.selectedDepartmentId = value.id;
-                  print(
-                      "Selected Department id::${selectedDepartmentIdStore.selectedDepartmentId}");
-                  print(selectedDepartmentIdStore.toString());
-
-
-
-                  // semesterWithSubjectsController.selectedSubject.value = null;
+                  log("Selected Department id::${selectedDepartmentIdStore.selectedDepartmentId}");
                   await semesterWithSubjectsController.fetchSemesterSubjects();
-
-                  // await departmentController.fetchDepartments();
                 }
               },
             ),
@@ -81,16 +71,13 @@ class AttendanceDropDownScreen extends StatelessWidget {
                 onChanged: (int? value) {
                   if (value != null) {
                     selectedSemesterIdStore.SelectedSemesterId = value;
-                    print(
-                        "selected semester id::${selectedSemesterIdStore.SelectedSemesterId}");
-                    print(selectedSemesterIdStore.toString());
+                    log("Selected semester id::${selectedSemesterIdStore.SelectedSemesterId}");
                     semesterWithSubjectsController
                         .setSelectedSemester(value.toString());
                     semesterWithSubjectsController.selectedSubject.value = null;
                     List<Semesterwithsubjectmodel> subjects =
                         semesterSubjectsMap[value] ?? [];
                     semesterWithSubjectsController.updateSubjects(subjects);
-
                   }
                 },
               );
@@ -113,9 +100,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
                   if (newValue != null) {
                     selectedSubjectIdStore.SelectedSubjectId =
                         newValue.subjectId;
-                    print(
-                        "selected subject id::${selectedSubjectIdStore.SelectedSubjectId}");
-                    print(selectedSubjectIdStore.toString());
+                    log("Selected subject id::${selectedSubjectIdStore.SelectedSubjectId}");
                     semesterWithSubjectsController.setSelectedSubject(newValue);
                   }
                 },
@@ -125,43 +110,39 @@ class AttendanceDropDownScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                RoundButton(
-                  title: 'Submit',
-                  onPress: ()  async {
 
-                    final AttendanceController attendanceController = Get.put(AttendanceController());
-                    log("Submit button pressed. studentflag: ${attendanceController.studentflag.value}");
+                Obx(() {
+                  return RoundButton(
+                    title: 'Submit',
+                    loading: attendancedropDownScreenController.isLoading.value,
 
-                    // Reset the state before fetching new data
-                    attendanceController.resetState();
+                    onPress: () async {
 
-                    // Show loading
-                    LoadingController.showLoading();
+                      attendancedropDownScreenController.setLoading(true);
 
-                    // Using Future.delayed for a 2-second delay
-                    await Future.delayed(Duration(seconds: 2));
+                      log("Submit button pressed. Students list length: ${attendanceController.students.length}");
 
-                    // Fetch students
-                    await attendanceController.fetchStudents();
+                      // Reset state before fetching students
+                      attendanceController.resetState();
 
-                    // Navigate based on the flag value
-                    if (attendanceController.studentflag.value) {
-                      log("Navigating to AttendanceTakenScreen");
-                      Get.to(() => AttendanceTakenScreen());
-                    } else {
-                      log("Students not fetched yet or some issue occurred.");
-                      // Show an error or handle the state accordingly
-                    }
+                      // Fetch students
+                      await attendanceController.fetchStudents();
 
-                    // Hide loading
-                    LoadingController.hideLoading();
+                      // Check if students are fetched
+                      if (attendanceController.students.isNotEmpty) {
+                        log("Navigating to AttendanceTakenScreen");
+                        Get.to(() => AttendanceTakenScreen());
+                      } else {
+                        log("Students not fetched yet or some issue occurred.");
+                      }
 
-                  },
-
-                  height: 45,
-                  width: 160,
-                  buttonColor: AppColors.primaryColor,
-                ),
+                      attendancedropDownScreenController.setLoading(false);
+                    },
+                    height: 45,
+                    width: 300,
+                    buttonColor: AppColors.primaryColor,
+                  );
+                })
               ],
             ),
           ],
@@ -170,10 +151,3 @@ class AttendanceDropDownScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
