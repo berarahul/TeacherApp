@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../../../view_model/services/StudentTabServices/for_Student_list/controllers/studentTabSubjectsController.dart';
+import '../../../../../../../view_model/services/StudentTabServices/for_Student_list/controllers/StudentTabSubjectsController.dart';
 
 
 class StudentTabSubjectsDropdownWidgets extends StatelessWidget {
-  final Studenttabsubjectscontroller subjectController = Get.put(Studenttabsubjectscontroller());
+  final StudentTabSubjectController subjectController = Get.put(StudentTabSubjectController());
 
   @override
   Widget build(BuildContext context) {

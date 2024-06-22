@@ -19,9 +19,9 @@ class Studentdropdownscreen extends StatelessWidget {
           children: [
             Text('Students Dropdown ', style: TextStyle(fontSize: 24)),
             SizedBox(height: 16),
-            StudentTabDepartmentDropdownWidgets(),
+            StudentTabDepartmentDropdownWidget(),
             SizedBox(height: 16),
-            studentTabSemesterDropdownWidgets(),
+            StudentTabSemesterDropdownWidgets(),
             SizedBox(height: 16),
             StudentTabSubjectsDropdownWidgets(),
             SizedBox(height: 32),

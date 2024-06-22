@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class Studenttabsubjectscontroller extends GetxController {
+class StudentTabSubjectController extends GetxController {
   var selectedSubject = ''.obs;
   var subjects = <String>['Math', 'Science', 'History'].obs;
 

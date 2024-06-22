@@ -1,4 +1,5 @@
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
+import 'package:attendence/view_model/services/StudentTabServices/ForDropdown/StudentsDroodownHelperFunctions/StudentTabSelectedDepartmentIdStore.dart';
 import '../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
 import '../../view_model/services/Login_Services/Login_Helper_Function/Login_Storage_Helper.dart';
 class AppUrl {
@@ -28,5 +29,10 @@ static String  get StudentDataAPiUrl{
    static String get studentTabDepartmentApiUrl{
 
     return "$baseurl/api/dept/all";
+   }
+
+   static String get StudentTabSemesterWithSubjectsAPiUrl {
+    int departmentId= StudentTabSelectedDepartmentIdStore().selectedDepartmentId;
+    return "$baseurl/api/dept/subjects/$departmentId";
    }
 }

@@ -1,13 +1,11 @@
-
-
-class studenttabDepartmentModel {
+class StudentTabDepartmentModel {
   final int id;
   final String departmentName;
 
-  studenttabDepartmentModel({required this.id, required this.departmentName});
+  StudentTabDepartmentModel({required this.id, required this.departmentName});
 
-  factory studenttabDepartmentModel.fromJson(Map<String, dynamic> json) {
-    return studenttabDepartmentModel(
+  factory StudentTabDepartmentModel.fromJson(Map<String, dynamic> json) {
+    return StudentTabDepartmentModel(
       id: json['id'],
       departmentName: json['departmentName'],
     );

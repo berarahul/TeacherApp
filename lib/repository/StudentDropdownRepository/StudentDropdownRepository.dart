@@ -13,4 +13,12 @@ class Studentdropdownrepository{
 
 
 
+
+  static Future<dynamic> departmentWiseSemesterAndSubjectFetch() async {
+    dynamic response=await _apiServices.getApi(AppUrl.StudentTabSemesterWithSubjectsAPiUrl);
+
+    return response;
+  }
+
+
 }
