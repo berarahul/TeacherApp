@@ -41,14 +41,16 @@ class AttendanceDropDownScreen extends StatelessWidget {
     RxList<DepartmentModel> departmentModels = departmentController.departments;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dropdown Example'),
+        backgroundColor: AppColors.primaryColor,
+        automaticallyImplyLeading: false,
+        title: const Text('Attendance'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Select Department:'),
+            // const Text('Select Department:'),
             DepartmentDropdownWidget(
               key: UniqueKey(),
               departments: departmentModels,
@@ -61,7 +63,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 20),
-            const Text('Select Semesters:'),
+            // const Text('Select Semesters:'),
             Obx(() {
               var semesterSubjectsMap =
                   semesterWithSubjectsController.semesterSubjectMap;
@@ -83,7 +85,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
               );
             }),
             const SizedBox(height: 20),
-            const Text('Select Subject:'),
+            // const Text('Select Subject:'),
             Obx(() {
               int selectedSemesterId = int.parse(
                   semesterWithSubjectsController.selectedSemester.value);
@@ -106,7 +108,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
                 },
               );
             }),
-            const SizedBox(height: 100),
+            const SizedBox(height: 258),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -114,6 +116,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
                 Obx(() {
                   return RoundButton(
                     title: 'Submit',
+
                     loading: attendancedropDownScreenController.isLoading.value,
 
                     onPress: () async {
@@ -139,7 +142,7 @@ class AttendanceDropDownScreen extends StatelessWidget {
                       attendancedropDownScreenController.setLoading(false);
                     },
                     height: 45,
-                    width: 300,
+                    width: 200,
                     buttonColor: AppColors.primaryColor,
                   );
                 })

@@ -9,7 +9,7 @@ class Subject {
   factory Subject.fromJson(Map<String, dynamic> json) {
     return Subject(
       id: json['id'] ?? 0,
-      name: json['name'] ?? 'Unknown',
+      name: json['subName'] ?? 'Unknown',
       semesterId: json['semesterId'] ?? 0,
     );
   }

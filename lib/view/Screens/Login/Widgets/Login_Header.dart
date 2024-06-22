@@ -24,6 +24,7 @@ class Login_header extends StatelessWidget {
           image: AssetImage(
               dark ? RImages.darkAppLogo : RImages.LightAppLogo),
         ),
+        const SizedBox(height: RSizes.lg),
         Text(RTexts.loginTitle,
             style: Theme.of(context).textTheme.headlineMedium),
         const SizedBox(height: RSizes.lg),

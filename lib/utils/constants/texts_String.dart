@@ -20,7 +20,7 @@ class RTexts{
 
   // For Login
   static const String loginTitle="Wellcome";
-  static const String loginSubTitle="Hello sir, Please Login Your Account and Go away for Student Attendance";
+  static const String loginSubTitle="Hello sir, Please Login Your Account and take a students attendance";
   static const String username="Username";
   static const String password="Password";
   static const String Forgetpassword="Forget Password?";

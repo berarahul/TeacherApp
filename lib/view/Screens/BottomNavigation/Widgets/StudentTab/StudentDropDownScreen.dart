@@ -1,3 +1,6 @@
+import 'package:attendence/res/Colors/AppColors.dart';
+import 'package:attendence/res/components/roundButton.dart';
+import 'package:attendence/view/Screens/BottomNavigation/Widgets/StudentTab/StudentDropdownWidgets/Widgets/student_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,26 +14,30 @@ class Studentdropdownscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.primaryColor,
+        automaticallyImplyLeading: false,
         title: Text('Students'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text('Students Dropdown ', style: TextStyle(fontSize: 24)),
+
             SizedBox(height: 16),
             StudentTabDepartmentDropdownWidget(),
             SizedBox(height: 16),
             StudentTabSemesterDropdownWidgets(),
             SizedBox(height: 16),
-            StudentTabSubjectsDropdownWidgets(),
-            SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () {
-                // Handle form submission
-              },
-              child: Text('Submit'),
-            ),
+            StudentTabSubjectsDropdownWidget(),
+            SizedBox(height: 220),
+
+            RoundButton(title: "Show",
+                height: 45,
+                width: 200,
+                onPress: () {
+               Get.to(FetchingStudentScreen());
+            }
+            )
           ],
         ),
       ),

@@ -57,7 +57,7 @@ class Login_form extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: RSizes.xl),
+        const SizedBox(height: 40),
 
         // Forget Password Button
         Row(
@@ -72,7 +72,7 @@ class Login_form extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: RSizes.xl),
+        const SizedBox(height: 150),
 
         // Sign In Button
         SizedBox(

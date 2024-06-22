@@ -1,19 +1,23 @@
+
+
 import 'dart:developer';
 
-import 'package:attendence/view_model/services/StudentTabServices/ForDropdown/StudentsDroodownHelperFunctions/StudentTabSelectedDepartmentIdStore.dart';
-import 'package:attendence/view_model/services/StudentTabServices/for_Student_list/controllers/studentTabsemesterController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
 import '../../../../../../../models/for_student_tab/Department_Model.dart';
-import '../../../../../../../repository/StudentDropdownRepository/StudentDropdownRepository.dart';
+import '../../../../../../../view_model/services/StudentTabServices/ForDropdown/StudentsDroodownHelperFunctions/StudentTabSelectedDepartmentIdStore.dart';
 import '../../../../../../../view_model/services/StudentTabServices/for_Student_list/controllers/studentTabDepartmentController.dart';
- // Adjust the path as needed
+import '../../../../../../../view_model/services/StudentTabServices/for_Student_list/controllers/studentTabsemesterController.dart';
 
 class StudentTabDepartmentDropdownWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final StudentTabDepartmentController departmentController = Get.put(StudentTabDepartmentController());
-StudentTabSelectedDepartmentIdStore studentTabSelectedDepartmentIdStore=Get.put(StudentTabSelectedDepartmentIdStore());
+    final StudentTabSelectedDepartmentIdStore studentTabSelectedDepartmentIdStore = Get.put(StudentTabSelectedDepartmentIdStore());
+    final StudentTabSemesterController semesterController = Get.put(StudentTabSemesterController()); // Use existing instance
+
     return Obx(() {
       if (departmentController.isLoading.value) {
         return CircularProgressIndicator();
@@ -28,10 +32,11 @@ StudentTabSelectedDepartmentIdStore studentTabSelectedDepartmentIdStore=Get.put(
             .toList(),
         onChanged: (value) {
           if (value != null) {
-            studentTabSelectedDepartmentIdStore.selectedDepartmentId= value.id;
+            studentTabSelectedDepartmentIdStore.selectedDepartmentId = value.id;
             log("Selected Department id::${studentTabSelectedDepartmentIdStore.selectedDepartmentId}");
             departmentController.setSelectedDepartment(value);
-            StudentTabSemesterController().fetchAndStoreSubjects();
+            semesterController.clearData(); // Clear previous data
+            semesterController.fetchAndStoreSubjects(); // Fetch new data
           }
         },
         decoration: InputDecoration(
