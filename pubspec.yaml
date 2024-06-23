@@ -58,6 +58,7 @@ flutter:
     - assets/LOGOS/
     - assets/icons/dark/
     - assets/icons/light/
+    - assets/images/developerImage/
 
   #-----------------------LOCAL FONTS-------------------------#
   fonts:

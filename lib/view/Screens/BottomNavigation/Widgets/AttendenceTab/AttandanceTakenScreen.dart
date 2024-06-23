@@ -1,4 +1,5 @@
 import 'package:attendence/res/AppUrl/AppUrl.dart';
+import 'package:attendence/res/Colors/AppColors.dart';
 import 'package:attendence/view/Screens/constant/dataNotfoundScreen.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,8 @@ class AttendanceTakenScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Attendance'),
+          automaticallyImplyLeading: false,
+        backgroundColor: AppColors.primaryColor,
       ),
       body: Obx(() {
         return ListView.builder(
