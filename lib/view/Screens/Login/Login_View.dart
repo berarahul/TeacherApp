@@ -10,8 +10,8 @@ import 'Widgets/Login_Header.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
-  TextEditingController teacherIdController = TextEditingController();
-  TextEditingController deptIdController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
               Login_header(dark: dark),
               const SizedBox(height: RSizes.lg),
               Form(
-                child: Login_form(teacherIdController: teacherIdController, deptIdController: deptIdController),
+                child: Login_form(usernameController: usernameController, passwordController: passwordController),
               ),
             ],
           ),

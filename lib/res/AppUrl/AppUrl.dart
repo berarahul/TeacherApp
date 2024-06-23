@@ -5,13 +5,12 @@ import '../../view_model/services/Login_Services/Login_Helper_Function/Login_Sto
 class AppUrl {
   static const String baseurl = "https://attendancesystem-s1.onrender.com";
   static String get departmentApiUrl {
-    String teacherId = Login_Storage_Helper.retrieveTeacherId() ??
-        ""; // Get teacherId from Login_Storage_Helper
+    int? teacherId = LoginStorageHelper.retrieveId(); // Get teacherId from Login_Storage_Helper
     return "$baseurl/api/teacher/$teacherId"; // Append teacherId to the departmentApiUrl
   }
 
   static String get semesterWithSubjectApiUrl {
-    String teacherId = Login_Storage_Helper.retrieveTeacherId() ?? "";
+    int? teacherId = LoginStorageHelper.retrieveId();
     int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
     // Get teacherId from Login_Storage_Helper
     return "$baseurl/api/teacher/$teacherId/$departmentId";
@@ -36,3 +35,4 @@ static String  get StudentDataAPiUrl{
     return "$baseurl/api/dept/subjects/$departmentId";
    }
 }
+

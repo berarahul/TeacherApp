@@ -5,12 +5,12 @@ import 'package:attendence/view/Screens/OnBoarding/OnBoarding_View.dart';
 import 'package:attendence/view_model/services/On_Boarding_Services/hasSeenOnboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'local_storage/my_storage_controller.dart';
+
 
 
 class MyApp extends StatelessWidget {
   final OnboardingService onboardingService = OnboardingService();
-  final MyStorageController myStorageController = Get.put(MyStorageController());
+  // final MyStorageController myStorageController = Get.put(MyStorageController());
    MyApp({Key? key}) : super(key: key);
 
 

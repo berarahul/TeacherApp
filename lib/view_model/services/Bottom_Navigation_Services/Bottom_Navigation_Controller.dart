@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 
 import '../../../view/Screens/BottomNavigation/Widgets/AttendenceTab/AttandanceDropdownScreen.dart';
+import '../../../view/Screens/BottomNavigation/Widgets/HomeTab/Home_Widget.dart';
 import '../../../view/Screens/BottomNavigation/Widgets/ProfileTab/Profile_Widget.dart';
 import '../../../view/Screens/BottomNavigation/Widgets/StudentTab/StudentDropDownScreen.dart';
 import '../AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
@@ -17,9 +18,7 @@ class BottomNavigationController extends GetxController {
   final DepartmentController departmentController = Get.put(DepartmentController());
 
   final screens = [
-    Container(
-      color: Colors.blue,
-    ),
+    HomeScreen(),
     Obx(() {
       if (LoadingController.isLoading.value) {
         // Show loading indicator while fetching departments

@@ -1,16 +1,19 @@
+import 'dart:convert';
+
 import 'package:attendence/res/AppUrl/AppUrl.dart';
+import 'package:attendence/res/Colors/AppColors.dart';
 import 'package:attendence/view/Screens/constant/dataNotfoundScreen.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../../../repository/AttendenceDropDownRepository/AttendenceDropDownRepository.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_subject_id.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/AttandanceTakenScreenController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/attandancesubmitcontroller.dart';
+import '../../../../../view_model/services/Login_Services/Login_Helper_Function/AuthariizationHeader.dart';
 import '../../../constant/AttendanceSuccessFully.dart';
-
+import 'package:http/http.dart' as http;
 class AttendanceTakenScreen extends StatelessWidget {
   final AttendanceController controller = Get.put(AttendanceController());
   final AttendanceSubmitController submitController = Get.put(
@@ -30,20 +33,43 @@ class AttendanceTakenScreen extends StatelessWidget {
       "subjectId": subjectId,
       "rolls": rolls
     };
-    // Call the API to submit the data
-    try {
-      var response = await AttendanceDropDownRepository.takeAttendanceData(data);
-      print("Response status code: ${response['statusCode']}");
-      print("Response status message: ${response['statusMsg']}");
-      if (response['statusCode'] == "201" &&
-          response['statusMsg'] != null &&
-          response['statusMsg'].toString().contains('Attendance created successfully')) {
-        print("Submission successful");
-        return true;
-      }
 
-      else {
-        print("Submission failed: Unexpected response");
+    // Convert data to JSON string
+    String jsonData = jsonEncode(data);
+
+    // Prepare headers using ApiHelper
+    ApiHelper apiHelper = ApiHelper();
+    Map<String, String> headers;
+    try {
+      headers = await apiHelper.getHeaders();
+    } catch (e) {
+      print('Error getting headers: $e');
+      return false;
+    }
+
+    try {
+      var url = Uri.parse(AppUrl.takeAttendanceDataAPiUrl); // Get URL from AppUrl class
+      var response = await http.post(
+        url,
+        headers: headers,
+        body: jsonData,
+      );
+
+      print("Response status code: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
+      if (response.statusCode == 201) {
+        var responseData = jsonDecode(response.body);
+        if (responseData['statusMsg'] != null &&
+            responseData['statusMsg'].toString().contains('Attendance created successfully')) {
+          print("Submission successful");
+          return true;
+        } else {
+          print("Submission failed: Unexpected response");
+          return false;
+        }
+      } else {
+        print("Submission failed with status code: ${response.statusCode}");
         return false;
       }
     } catch (e) {
@@ -51,11 +77,14 @@ class AttendanceTakenScreen extends StatelessWidget {
       return false;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Attendance'),
+          automaticallyImplyLeading: false,
+        backgroundColor: AppColors.primaryColor,
       ),
       body: Obx(() {
         return ListView.builder(
@@ -132,3 +161,5 @@ class AttendanceTakenScreen extends StatelessWidget {
     );
   }
 }
+
+
