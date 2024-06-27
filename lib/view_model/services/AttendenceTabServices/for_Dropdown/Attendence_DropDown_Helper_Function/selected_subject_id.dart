@@ -7,7 +7,7 @@ class SelectedSubjectIdStore{
 
   int get SelectedSubjectId => _box.read('SelectedSubjectId') ?? 0;
 
-  set SelectedSubjectId(int value) => _box.write('SelectedSubjectId', value);
+  set SelectedSubjectId(int? value) => _box.write('SelectedSubjectId', value);
 
   void clearSelectedSubjectId() => _box.remove('SelectedSubjectId');
 

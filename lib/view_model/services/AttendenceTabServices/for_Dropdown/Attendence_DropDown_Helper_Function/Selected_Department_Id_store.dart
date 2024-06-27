@@ -5,7 +5,7 @@ class SelectedDepartmentIdStore {
 
   int get selectedDepartmentId => _box.read('selectedDepartmentId') ?? 0;
 
-  set selectedDepartmentId(int value) => _box.write('selectedDepartmentId', value);
+  set selectedDepartmentId(int? value) => _box.write('selectedDepartmentId', value);
 
   void clearSelectedDepartmentId() => _box.remove('selectedDepartmentId');
 }

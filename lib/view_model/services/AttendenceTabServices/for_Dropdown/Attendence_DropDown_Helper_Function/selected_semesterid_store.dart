@@ -5,7 +5,7 @@ class SelectedSemesterIdStore {
 
   int get SelectedSemesterId => _box.read('SelectedSemesterId') ?? 0;
 
-  set SelectedSemesterId(int value) => _box.write('SelectedSemesterId', value);
+  set SelectedSemesterId(int? value) => _box.write('SelectedSemesterId', value);
 
   void clearSelectedSemesterId() => _box.remove('SelectedSemesterId');
 }

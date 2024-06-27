@@ -68,12 +68,12 @@ class StudentTabDepartmentController extends GetxController {
   StudentTabSelectedDepartmentIdStore selectedDepartmentIdStore = Get.put(StudentTabSelectedDepartmentIdStore());
 
   @override
-  void onInit() {
-    fetchDepartments();
-    super.onInit();
-  }
+  // void onInit() {
+  //   fetchDepartments();
+  //   super.onInit();
+  // }
 
-  void fetchDepartments() async {
+  Future<void> fetchDepartments() async {
     try {
       isLoading(true);
 

@@ -40,7 +40,7 @@ class FetchingStudentScreen extends StatelessWidget {
                 attendencePersent: attendancePercentage.toStringAsFixed(2),
                 attendanceColor: attendanceColor,
                 image:
-                'https://via.placeholder.com/150', // Replace with actual image URL if available
+                'https://cdn3d.iconscout.com/3d/premium/thumb/graduate-student-avatar-10107492-8179543.png?f=webp', // Replace with actual image URL if available
               );
             },
           );
