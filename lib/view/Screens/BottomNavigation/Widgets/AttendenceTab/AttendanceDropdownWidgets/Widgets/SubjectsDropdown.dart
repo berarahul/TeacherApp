@@ -51,6 +51,6 @@ class SubjectDropdownWidget extends StatelessWidget {
   void _showTooltip(String subjectName) {
     // Show tooltip or other UI to display full subject name
     // You can use GetX's Get.snackbar for a simple tooltip-like display
-    Get.snackbar('Full Name', subjectName);
+    Get.snackbar('Subject', subjectName);
   }
 }

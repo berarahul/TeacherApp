@@ -13,7 +13,7 @@ class AppColors{
   static const Color primaryColor = Color(0xFF4B68FF);
   static const Color secondaryColor = Color(0xFFFFE24B);
   static const Color occent = Color(0xFFb0c7ff);
-
+static const Color appcolor= Color(0xFF19A3E5);
 
   // Text Colors
   static const Color textPrimary = Color(0xFF333333);
@@ -38,4 +38,7 @@ class AppColors{
   static const Color backgroundColor = Color(0xFFF5F5F5);
   static const Color redColor = Color(0xFFDC0000);
 
+
+  static const Color softRed = Color(0xFFFF7E5F);
+  static const Color peach = Color(0xFFFEB47B);
 }

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helperFunctions.dart';
-
-
-
 class OnBoardPage extends StatelessWidget {
   const OnBoardPage({
     Key? key,

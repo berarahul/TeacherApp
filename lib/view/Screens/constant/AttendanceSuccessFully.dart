@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../res/Colors/AppColors.dart';
 import '../../../res/Colors/AppColors.dart';
 import '../../../view_model/services/Bottom_Navigation_Services/Bottom_Navigation_Controller.dart';
 import '../BottomNavigation/Bottom_Navigation_Menu.dart';
@@ -38,7 +36,7 @@ class Attendancesuccessfully extends StatelessWidget {
               },
               child: Text('GO BACK TO Home'),
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: AppColors.primaryColor,
+                foregroundColor: Colors.white, backgroundColor: AppColors.appcolor,
               ),
             ),
           ],

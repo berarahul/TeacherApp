@@ -53,3 +53,7 @@ class StudentTabSubjectsDropdownWidget extends StatelessWidget {
     return name.length <= maxLength ? name : '${name.substring(0, maxLength)}...';
   }
 }
+
+
+
+

@@ -1,18 +1,18 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../../../models/for_student_tab/AttandanceFetchModel.dart';
 import '../../../Login_Services/Login_Helper_Function/AuthariizationHeader.dart';
 import '../../ForDropdown/StudentsDroodownHelperFunctions/StudentTabSelectedDepartmentIdStore.dart';
 import '../../ForDropdown/StudentsDroodownHelperFunctions/selectedSubjectIdStore.dart';
-// Adjust the path as needed
 
 class StudentController extends GetxController {
   var students = <StudentAttendance>[].obs;
   var totalClasses = 0.obs;
   var isLoading = true.obs;
+  var lastFetched = ''.obs; // Add this to store the last fetched time
 
   final StudentTabSelectedDepartmentIdStore _departmentIdStore = StudentTabSelectedDepartmentIdStore();
   final StudentTabSelectedSubjectIdStore _subjectIdStore = StudentTabSelectedSubjectIdStore();
@@ -27,15 +27,22 @@ class StudentController extends GetxController {
     int deptId = _departmentIdStore.selectedDepartmentId;
     int subId = _subjectIdStore.selectedSubjectId;
 
-    try {
-      final headers = await ApiHelper().getHeaders(); // Get headers from ApiHelper
+    isLoading.value = true;
+    print('Fetching students attendance for deptId: $deptId and subId: $subId');
 
+    try {
+      final headers = await ApiHelper().getHeaders();
       final response = await ApiHelper.get('attendance/fetch?deptid=$deptId&subid=$subId', headers: headers);
 
       if (response.statusCode == 200) {
-        var data = AttendanceResponse.fromJson(json.decode(response.body));
-        totalClasses.value = data.totalClass;
-        students.value = data.studentsAttendanceList;
+        var data = json.decode(response.body); // Decode the JSON response
+        print('API Response Data: $data'); // Print the raw data from the API
+
+        var attendanceResponse = AttendanceResponse.fromJson(data); // Convert to model
+        totalClasses.value = attendanceResponse.totalClass;
+        students.value = attendanceResponse.studentsAttendanceList;
+        lastFetched.value = DateTime.now().toString(); // Update last fetched time
+        print('Data fetched successfully at ${lastFetched.value}');
       } else {
         throw Exception('Failed to load student attendance: ${response.statusCode}');
       }
@@ -44,6 +51,7 @@ class StudentController extends GetxController {
       throw Exception('Failed to load student attendance');
     } finally {
       isLoading.value = false;
+      update();
     }
   }
 
@@ -61,5 +69,11 @@ class StudentController extends GetxController {
     } else {
       return Colors.red;
     }
+  }
+
+  void resetState() {
+    students.clear();
+    totalClasses.value = 0;
+    isLoading.value = true; // Reset isLoading to true when resetting state
   }
 }

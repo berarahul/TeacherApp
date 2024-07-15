@@ -1,13 +1,18 @@
-import 'package:attendence/view/Screens/BottomNavigation/Widgets/AttendenceTab/AttandanceDropdownScreen.dart';
+
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+class AttendanceDropDownScreenController extends GetxController {
+  var selectedDepartmentId = Rxn<int>();
+  var selectedSemesterId = Rxn<int>();
+  var selectedSubjectId = Rxn<int>();
+  var isLoading = false.obs;
 
-   class AttendanceDropDownScreenController extends GetxController{
+  void resetSelections() {
+    selectedDepartmentId.value = null;
+    selectedSemesterId.value = null;
+    selectedSubjectId.value = null;
+  }
 
-     var isLoading = false.obs;
-     void setLoading(bool value) {
-       isLoading.value = value;
-     }
-
-
+  void setLoading(bool value) {
+    isLoading.value = value;
+  }
 }

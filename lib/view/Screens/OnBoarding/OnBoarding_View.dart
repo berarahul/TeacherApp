@@ -6,13 +6,9 @@ import 'package:attendence/view/Screens/OnBoarding/widgets/onBoardingPageStructu
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/texts_String.dart';
 import '../../../view_model/services/On_Boarding_Services/On_Boarding_Controller.dart';
-
-
-
 class OnBoardingScreen extends StatelessWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
 

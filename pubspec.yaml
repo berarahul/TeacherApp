@@ -25,7 +25,6 @@ dependencies:
   flutter_svg:
   persistent_bottom_nav_bar: ^5.0.2
   snippet_coder_utils: ^1.0.15
-  device_preview: ^1.1.0
   flutter_native_splash:
   smooth_page_indicator: ^1.1.0
   iconsax: ^0.0.8
@@ -41,6 +40,8 @@ dependencies:
   get: ^4.6.6
   get_storage: ^2.1.1
   get_it: ^7.7.0
+
+
 #PROJECT SPECIFIC
 
 #-----------------------./PACKAGES END-------------------------#
@@ -61,6 +62,8 @@ flutter:
     - assets/icons/dark/
     - assets/icons/light/
     - assets/images/developerImage/
+    - assets/images/defaultimage/
+    - assets/images/forsplash/
 
   #-----------------------LOCAL FONTS-------------------------#
   fonts:

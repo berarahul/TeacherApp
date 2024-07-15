@@ -13,7 +13,7 @@ import '../../../Login_Services/Login_Helper_Function/AuthariizationHeader.dart'
 class SemesterWithSubjectsController extends GetxController {
   var semesterSubjectMap = <int, List<Semesterwithsubjectmodel>>{}.obs;
   var selectedSubject = Rx<Semesterwithsubjectmodel?>(null);
-  final selectedSemester = "0".obs;
+  late final selectedSemester = "0".obs;
 
   final ApiHelper apiHelper = ApiHelper(); // Instance of ApiHelper
 
@@ -78,5 +78,10 @@ class SemesterWithSubjectsController extends GetxController {
     selectedSemester.value = '';
     selectedSubject.value = null;
     // Clear any other related data if necessary
+  }
+  void semesterSubjectMapclear(){
+
+ semesterSubjectMap.clear();
+
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import '../../../../../models/for_attandance_tab/StudentData/StudentDataModel.dart';
 import '../../../../../res/AppUrl/AppUrl.dart';
@@ -17,7 +16,7 @@ class AttendanceController extends GetxController {
       // Fetch headers using the ApiHelper
       Map<String, String> headers = await apiHelper.getHeaders();
 
-      // Define the API URL
+      // Define the API URL (adjust as per your actual URL structure)
       String apiUrl = AppUrl.StudentDataAPiUrl;
       log("Fetching students from: $apiUrl");
 
@@ -32,21 +31,21 @@ class AttendanceController extends GetxController {
             .map((data) => StudentDataModel.fromJson(data))
             .toList();
 
-        // Update the students list on the next frame
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-          students.assignAll(fetchedStudents);
-          log("Students fetched and updated: ${students.length}");
-          // Call resetState after fetching students successfully
-          resetState();
-        });
+        // Update the students list
+        students.assignAll(fetchedStudents);
+        log("Students fetched and updated: ${students.length}");
+
+        // Optionally, reset state if needed
+        resetState();
       } else {
-        // Log the error if the response status code is not 200
+        // Log and handle non-200 status codes
         log("Failed to fetch students: ${response.statusCode} - ${response.body}");
-        throw Exception("Failed to fetch students");
+        throw Exception("Failed to fetch students: ${response.statusCode}");
       }
     } catch (e) {
-      // Log any exceptions that occur during the fetch
+      // Log and handle any exceptions
       log("Error fetching students: $e");
+      throw Exception("Error fetching students: $e");
     }
   }
 
@@ -60,10 +59,8 @@ class AttendanceController extends GetxController {
     }
   }
 
-  // Reset the state
+  // Reset the state if needed
   void resetState() {
     log("State reset done");
   }
-
-
-  }
+}

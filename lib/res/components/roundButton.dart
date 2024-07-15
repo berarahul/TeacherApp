@@ -8,7 +8,7 @@ class RoundButton extends StatelessWidget {
 
   const RoundButton({
     Key? key ,
-    this.buttonColor = AppColors.primaryColor  ,
+     this.buttonColor = AppColors.appcolor  ,
     this.textColor = AppColors.textwhite ,
     required this.title ,
     required this.onPress ,

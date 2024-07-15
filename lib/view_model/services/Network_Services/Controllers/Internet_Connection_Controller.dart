@@ -23,7 +23,7 @@ class InternetConnectionController extends GetxController {
       Get.snackbar(
         "No Internet",
         "You are not connected to the internet",
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
       );
       isConnected.value = false;
     } else {
@@ -31,7 +31,7 @@ class InternetConnectionController extends GetxController {
       Get.snackbar(
         "Internet Connected",
         "You are back online",
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
       );
       isConnected.value = true;
     }

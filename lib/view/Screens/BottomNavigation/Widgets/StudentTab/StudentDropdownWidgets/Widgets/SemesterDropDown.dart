@@ -1,19 +1,17 @@
-import 'package:attendence/models/for_student_tab/SemesterModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-
 import '../../../../../../../view_model/services/StudentTabServices/for_Student_list/controllers/studentTabsemesterController.dart';
 
-class StudentTabSemesterDropdownWidgets extends StatelessWidget {
-  final StudentTabSemesterController controller = Get.put(StudentTabSemesterController());
-
+class StudentTabSemesterDropdownWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final StudentTabSemesterController controller = Get.put(StudentTabSemesterController());
+
     return Obx(() {
       return DropdownButtonFormField<String>(
-        value: controller.selectedSemester.value.isEmpty ? null : controller.selectedSemester.value,
+        value: controller.selectedSemester.value.isNotEmpty
+            ? controller.selectedSemester.value
+            : null,
         onChanged: (value) {
           if (value != null) {
             controller.setSelectedSemester(value);
@@ -33,5 +31,3 @@ class StudentTabSemesterDropdownWidgets extends StatelessWidget {
     });
   }
 }
-
-

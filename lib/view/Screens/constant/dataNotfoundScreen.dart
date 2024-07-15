@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 class DataNotFoundScreen extends StatelessWidget {
   const DataNotFoundScreen({super.key});
 
@@ -10,7 +9,7 @@ class DataNotFoundScreen extends StatelessWidget {
 
       body: Center(
         child: Text(
-          'Data not found',
+          'you already Attendance to your all Classes',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,

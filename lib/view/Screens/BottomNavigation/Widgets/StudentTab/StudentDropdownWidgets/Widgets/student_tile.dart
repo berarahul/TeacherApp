@@ -3,21 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../../../view_model/services/Bottom_Navigation_Services/Bottom_Navigation_Controller.dart';
 import '../../../../../../../view_model/services/StudentTabServices/for_Student_list/controllers/studentTileController.dart';
-
-
 import '../../../../Bottom_Navigation_Menu.dart';
-import '../../../HomeTab/Home_Widget.dart'; // Adjust the import path as necessary
 
 class FetchingStudentScreen extends StatelessWidget {
   final StudentController studentController = Get.put(StudentController());
   final BottomNavigationController bottomNavController = Get.find<BottomNavigationController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: AppColors.appcolor,
         automaticallyImplyLeading: false,
-        title: Text('Student List'),
+        title: Center(child: Text('Student List')),
       ),
       body: Obx(() {
         if (studentController.isLoading.value) {
@@ -48,10 +46,12 @@ class FetchingStudentScreen extends StatelessWidget {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+
           bottomNavController.selectedIndex.value = 0; // Set index to 0
-          Get.off(() => BottomNavigationMenu()); // Adjust the navigation as necessary
+          Get.off(() => BottomNavigationMenu());
+        // Adjust the navigation as necessary
         },
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: AppColors.appcolor,
         child: Icon(Icons.home),
       ),
     );
@@ -82,3 +82,5 @@ Widget studentTile({
     ),
   );
 }
+
+

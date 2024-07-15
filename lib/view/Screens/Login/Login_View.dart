@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../../utils/common/styles/spacing_style.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helperFunctions.dart';

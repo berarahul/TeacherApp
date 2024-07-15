@@ -1,7 +1,4 @@
-
-
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -22,8 +19,15 @@ class StudentTabDepartmentDropdownWidget extends StatelessWidget {
       if (departmentController.isLoading.value) {
         return CircularProgressIndicator();
       }
+
+      // Ensure selected value exists in the list of departments
+      StudentTabDepartmentModel? selectedValue = departmentController.selectedDepartment.value;
+      if (selectedValue != null && !departmentController.departments.contains(selectedValue)) {
+        selectedValue = null;
+      }
+
       return DropdownButtonFormField<StudentTabDepartmentModel>(
-        value: departmentController.selectedDepartment.value,
+        value: selectedValue,
         items: departmentController.departments
             .map((department) => DropdownMenuItem<StudentTabDepartmentModel>(
           value: department,
