@@ -1,21 +1,20 @@
-import 'dart:convert';
 import 'package:attendence/res/AppUrl/AppUrl.dart';
-import 'package:attendence/res/Colors/AppColors.dart';
 import 'package:attendence/view/Screens/constant/dataNotfoundScreen.dart';
+import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../../repository/AttendenceDropDownRepository/AttendenceDropDownRepository.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_subject_id.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/AttandanceTakenScreenController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/attandancesubmitcontroller.dart';
-import '../../../../../view_model/services/Login_Services/Login_Helper_Function/AuthariizationHeader.dart';
 import '../../../constant/AttendanceSuccessFully.dart';
-import 'package:http/http.dart' as http;
 
 class AttendanceTakenScreen extends StatelessWidget {
   final AttendanceController controller = Get.put(AttendanceController());
-  final AttendanceSubmitController submitController = Get.put(AttendanceSubmitController());
+  final AttendanceSubmitController submitController = Get.put(
+      AttendanceSubmitController());
   List<int> selectedRollNumbers = [];
 
   Future<bool> handleSubmit() async {
@@ -31,39 +30,20 @@ class AttendanceTakenScreen extends StatelessWidget {
       "subjectId": subjectId,
       "rolls": rolls
     };
-
-    // Convert data to JSON string
-    String jsonData = jsonEncode(data);
-
-    // Prepare headers using ApiHelper
-    ApiHelper apiHelper = ApiHelper();
-    Map<String, String> headers;
+    // Call the API to submit the data
     try {
-      headers = await apiHelper.getHeaders();
-    } catch (e) {
-      print('Error getting headers: $e');
-      return false;
-    }
-
-    try {
-      var url = Uri.parse(AppUrl.takeAttendanceDataAPiUrl); // Get URL from AppUrl class
-      var response = await http.post(
-        url,
-        headers: headers,
-        body: jsonData,
-      );
-
-      print("Response status code: ${response.statusCode}");
-      print("Response body: ${response.body}");
-
-      if (response.statusCode == 201) {
+      var response = await AttendanceDropDownRepository.takeAttendanceData(data);
+      print("Response status code: ${response['statusCode']}");
+      print("Response status message: ${response['statusMsg']}");
+      if (response['statusCode'] == "201" &&
+          response['statusMsg'] != null &&
+          response['statusMsg'].toString().contains('Attendance created successfully')) {
         print("Submission successful");
         return true;
-      } else if (response.statusCode == 400) {
-        print("Submission failed with status code: ${response.statusCode}");
-        return false;
-      } else {
-        print("Submission failed with status code: ${response.statusCode}");
+      }
+
+      else {
+        print("Submission failed: Unexpected response");
         return false;
       }
     } catch (e) {
@@ -71,14 +51,11 @@ class AttendanceTakenScreen extends StatelessWidget {
       return false;
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Attendance')),
-        automaticallyImplyLeading: false,
-        backgroundColor: AppColors.appcolor,
+        title: Text('Attendance'),
       ),
       body: Obx(() {
         return ListView.builder(
@@ -86,13 +63,13 @@ class AttendanceTakenScreen extends StatelessWidget {
           itemBuilder: (_, index) {
             return ListTile(
               leading: CircleAvatar(
-                backgroundColor: AppColors.appcolor,
                 child: Icon(controller.students[index].isPresent
                     ? Icons.check
                     : Icons.close),
               ),
               title: Text(controller.students[index].name),
-              subtitle: Text('Roll No: ${controller.students[index].rollNumber}'),
+              subtitle:
+              Text('Roll No: ${controller.students[index].rollNumber}'),
               trailing: Obx(() =>
                   Checkbox(
                     value: controller.students[index].isPresent,
@@ -100,17 +77,21 @@ class AttendanceTakenScreen extends StatelessWidget {
                       controller.toggleAttendance(index);
 
                       if (value != null && value) {
-                        selectedRollNumbers.add(controller.students[index].rollNumber);
+                        selectedRollNumbers.add(
+                            controller.students[index].rollNumber);
                       } else {
-                        selectedRollNumbers.remove(controller.students[index].rollNumber);
+                        selectedRollNumbers.remove(
+                            controller.students[index].rollNumber);
                       }
                     },
-                    activeColor: AppColors.appcolor,
+                    activeColor: Colors.blue,
                   )),
             );
           },
         );
       }),
+
+
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: EdgeInsets.all(8.0),
@@ -133,22 +114,16 @@ class AttendanceTakenScreen extends StatelessWidget {
                 submitController.setSubmitting(false);
               },
               child: submitController.isSubmitting.value
-                  ? SizedBox(
-                height: 24.0,
-                width: 24.0,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
+                  ? CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               )
                   : Text('Submit'),
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
-                backgroundColor: AppColors.appcolor,
+                backgroundColor: Theme
+                    .of(context)
+                    .primaryColor,
                 disabledForegroundColor: Colors.grey.withOpacity(0.38),
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
               ),
             );
           }),
