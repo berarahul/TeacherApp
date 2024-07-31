@@ -25,5 +25,18 @@ class RTexts{
   static const String password="Password";
   static const String Forgetpassword="Forget Password?";
   static const String Login="Login";
+  static const String SingUp="Sign Up";
+
+  // For Sign Up
+
+static const String SingUpTitle="Let's Create an Account";
+static const String firstName="First Name";
+static const String lastName="Last Name";
+static const String UserName="Username";
+static const String confirmPassword="Confirm Password";
+static const String adharNumber="Aadhaar Number";
+static const String CreateAccount="Create Account";
+
+
 
 }

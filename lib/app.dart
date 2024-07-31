@@ -1,4 +1,8 @@
 import 'package:attendence/view/Screens/BottomNavigation/Bottom_Navigation_Menu.dart';
+
+import 'package:attendence/view/Screens/constant/DontHaveClass.dart';
+import 'package:attendence/view/Screens/constant/SundayScreen.dart';
+import 'package:attendence/view/Screens/singupScreens/SingUpPage.dart';
 import 'package:attendence/view_model/services/Login_Services/Login_Helper_Function/LoginAuthServices.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,6 +33,8 @@ class MyApp extends StatelessWidget {
       locale: Locale('en', 'US'),
       fallbackLocale: Locale('en', 'US'),
       home: isLoggedIn ? BottomNavigationMenu() : (hasSeenOnboarding ? LoginScreen() : OnBoardingScreen()),
+    // home: SingUpPage(),
+//     home: HolidayScreen(reason: 'Durga Pujo',),
     );
   }
 }

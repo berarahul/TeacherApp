@@ -12,6 +12,7 @@ import '../../../../view_model/services/Login_Services/Login_Helper_Function/Log
 
 import '../../../../view_model/services/Login_Services/login_controller.dart';
 import '../../BottomNavigation/Bottom_Navigation_Menu.dart';
+import '../../singupScreens/SingUpPage.dart';
 
 class Login_form extends StatelessWidget {
   const Login_form({
@@ -68,11 +69,11 @@ class Login_form extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () {
-                Get.snackbar("Forget Password", "This Features Available on Next Update");
+               Get.offAll(SingUpPage());
               },
               child: const Text(
 
-                RTexts.Forgetpassword,
+                RTexts.SingUp,
                 style: TextStyle(fontSize: RSizes.fontSizeLg,color: AppColors.appcolor),
               ),
             ),

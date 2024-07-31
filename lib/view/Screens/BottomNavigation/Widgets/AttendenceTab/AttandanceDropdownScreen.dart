@@ -1,26 +1,26 @@
 
 import 'dart:developer';
+import 'package:attendence/models/for_attandance_tab/SubjectModel.dart';
+import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SubjectController.dart';
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Taken_Attendence/controllers/AttandanceTakenScreenController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../models/for_attandance_tab/DepartmentModel.dart';
-import '../../../../../models/for_attandance_tab/SemesterWithSubjectModel.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/AttendanceDropDownScreenController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
-import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterWithSubjectController.dart';
+import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_subject_id.dart';
 import '../../../../../res/components/roundButton.dart';
 import '../../../../../res/Colors/AppColors.dart';
 import 'AttendanceDropdownWidgets/Widgets/DepartmentDropdown.dart';
-import 'AttendanceDropdownWidgets/Widgets/SemesterDropdown.dart';
-import 'AttendanceDropdownWidgets/Widgets/SubjectsDropdown.dart';
 import 'AttandanceTakenScreen.dart';
 
 class AttendanceDropDownScreen extends StatelessWidget {
   final DepartmentController departmentController = Get.put(DepartmentController());
-  final SemesterWithSubjectsController semesterWithSubjectsController = Get.put(SemesterWithSubjectsController());
+ final SemestreController SemesterController = Get.put(SemestreController());
+ final SubjectController subjectController = Get.put(SubjectController());
   final SelectedDepartmentIdStore selectedDepartmentIdStore = SelectedDepartmentIdStore();
   final SelectedSemesterIdStore selectedSemesterIdStore = SelectedSemesterIdStore();
   final SelectedSubjectIdStore selectedSubjectIdStore = SelectedSubjectIdStore();
@@ -69,53 +69,131 @@ class AttendanceDropDownScreen extends StatelessWidget {
                 onChanged: (DepartmentModel? value) async {
                   print("DepartmentDropdownWidget onChanged called with value: $value");
                   if (value != null) {
+
                     selectedDepartmentIdStore.selectedDepartmentId = value.id;
                     log("Selected Department id::${selectedDepartmentIdStore.selectedDepartmentId}");
                     print("Fetching semester and subjects after selecting department ID: ${value.id}");
-                    await semesterWithSubjectsController.fetchSemesterSubjects();
+                    await SemesterController.fetchSemester();
+
                   }
                 },
               ),
               const SizedBox(height: 20),
+
+
+          Obx(() {
+            if (SemesterController.fetchingSemesterList.isEmpty) {
+              return Container();
+            } else {
+              return DropdownButtonFormField<int>(
+                items: [
+                  DropdownMenuItem<int>(
+                    value: null,
+                    child: Text('Select Semester'),
+                  ),
+                  ...SemesterController.fetchingSemesterList.map((int semesterId) {
+                    return DropdownMenuItem<int>(
+                      value: semesterId,
+                      child: Text('Semester $semesterId'), // Customize your label here
+                    );
+                  }).toList()
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    SemesterController.setSemesterId(value);
+                    selectedSemesterIdStore.SelectedSemesterId = value;
+                    subjectController.fetchSubjects();
+                  }
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Semester',
+                  border: OutlineInputBorder(),
+                ),
+                value: SemesterController.semesterId.value == 0
+                    ? null
+                    : SemesterController.semesterId.value,
+              );
+            }
+          }),
+
+
+
+
+          const SizedBox(height: 20),
+
               Obx(() {
-                var semesterSubjectsMap = semesterWithSubjectsController.semesterSubjectMap;
-                print("SemesterDropdownWidget updated with semesterSubjectsMap: ${semesterSubjectsMap.value}");
-                return SemesterDropdownWidget(
-                  key: UniqueKey(),
-                  semesterSubjectsMap: semesterSubjectsMap.value,
-                  onChanged: (int? value) {
-                    print("SemesterDropdownWidget onChanged called with value: $value");
-                    if (value != null) {
-                      selectedSemesterIdStore.SelectedSemesterId = value;
-                      log("Selected semester id::${selectedSemesterIdStore.SelectedSemesterId}");
-                      semesterWithSubjectsController.setSelectedSemester(value.toString());
-                      semesterWithSubjectsController.selectedSubject.value = null;
-                      List<Semesterwithsubjectmodel> subjects = semesterSubjectsMap[value] ?? [];
-                      print("Updating subjects for selected semester ID: $value with subjects: $subjects");
-                      semesterWithSubjectsController.updateSubjects(subjects);
-                    }
-                  },
-                );
+                if (subjectController.subjectList.isEmpty) {
+                  return Container();
+                } else {
+                  return DropdownButtonFormField<int>(
+                    items: subjectController.subjectList.map((SubjectModel subject) {
+                      return DropdownMenuItem<int>(
+                        value: subject.subjectId,
+                        child: Tooltip(
+                          message: subject.subjectName,
+                          child: Container(
+                            width: 200.0, // Set a fixed width
+                            child: Text(
+                              subject.subjectName,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        subjectController.setSubjectId(value);
+                        selectedSubjectIdStore.SelectedSubjectId = value;
+
+                        // Show Snackbar with the full subject name
+                        var selectedSubject = subjectController.subjectList.firstWhere(
+                                (subject) => subject.subjectId == value
+                        );
+                        Get.snackbar(
+                          'Selected Subject',
+                          selectedSubject.subjectName,
+                          snackPosition: SnackPosition.TOP,
+                          duration: Duration(seconds: 3),
+                        );
+                      }
+                      subjectController.toggleDropdown(false);
+                    },
+                    onTap: () {
+                      subjectController.toggleDropdown(true);
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Subject',
+                      border: OutlineInputBorder(),
+                    ),
+                    value: subjectController.subjectId.value == 0
+                        ? null
+                        : subjectController.subjectId.value,
+                    selectedItemBuilder: (BuildContext context) {
+                      return subjectController.subjectList.map<Widget>((SubjectModel subject) {
+                        return Tooltip(
+                          message: subject.subjectName,
+                          child: Container(
+                            width: 200.0, // Set a fixed width
+                            child: Text(
+                              subject.subjectId == subjectController.subjectId.value
+                                  ? subject.subjectName
+                                  : subject.subjectName,
+                              overflow: subjectController.isDropdownOpened.value ? TextOverflow.visible : TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        );
+                      }).toList();
+                    },
+                  );
+                }
               }),
-              const SizedBox(height: 20),
-              Obx(() {
-                int selectedSemesterId = int.parse(semesterWithSubjectsController.selectedSemester.value);
-                RxList<Semesterwithsubjectmodel> subjects = RxList<Semesterwithsubjectmodel>(semesterWithSubjectsController.semesterSubjectMap[selectedSemesterId] ?? []);
-                print("SubjectDropdownWidget updated with subjects for selectedSemesterId: $selectedSemesterId");
-                return SubjectDropdownWidget(
-                  key: UniqueKey(),
-                  subjects: subjects.value,
-                  selectedSubject: semesterWithSubjectsController.selectedSubject,
-                  onChanged: (Semesterwithsubjectmodel? newValue) {
-                    print("SubjectDropdownWidget onChanged called with value: $newValue");
-                    if (newValue != null) {
-                      selectedSubjectIdStore.SelectedSubjectId = newValue.subjectId;
-                      log("Selected subject id::${selectedSubjectIdStore.SelectedSubjectId}");
-                      semesterWithSubjectsController.setSelectedSubject(newValue);
-                    }
-                  },
-                );
-              }),
+
+
+
+
               const SizedBox(height: 258),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

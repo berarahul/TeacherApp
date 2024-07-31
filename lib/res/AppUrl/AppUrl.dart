@@ -13,9 +13,20 @@ class AppUrl {
     int? teacherId = LoginStorageHelper.retrieveId();
     int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
     // Get teacherId from Login_Storage_Helper
-    return "$baseurl/api/teacher/$teacherId/$departmentId";
+    return "$baseurl/api/teacher/getSem?teacherid=$teacherId&deptid=$departmentId";
     // Append teacherId and departmentId to the semesterApiUrl// Append teacherId to the departmentApiUrl
   }
+
+  static String get SubjectApiUrl {
+
+    int teacherId = LoginStorageHelper.retrieveId();
+    int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
+    int semesterId = SelectedSemesterIdStore().SelectedSemesterId as int;
+
+    return "$baseurl/api/teacher?teacherid=$teacherId&sem=$semesterId&deptid=$departmentId";
+
+  }
+
 static String  get StudentDataAPiUrl{
 
   int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
