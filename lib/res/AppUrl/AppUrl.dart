@@ -1,5 +1,6 @@
 import 'package:attendence/view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/selected_semesterid_store.dart';
 import 'package:attendence/view_model/services/StudentTabServices/ForDropdown/StudentsDroodownHelperFunctions/StudentTabSelectedDepartmentIdStore.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../view_model/services/AttendenceTabServices/for_Dropdown/Attendence_DropDown_Helper_Function/Selected_Department_Id_store.dart';
 import '../../view_model/services/Login_Services/Login_Helper_Function/Login_Storage_Helper.dart';
 class AppUrl {
@@ -13,9 +14,20 @@ class AppUrl {
     int? teacherId = LoginStorageHelper.retrieveId();
     int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
     // Get teacherId from Login_Storage_Helper
-    return "$baseurl/api/teacher/$teacherId/$departmentId";
+    return "$baseurl/api/teacher/getSem?teacherid=$teacherId&deptid=$departmentId";
     // Append teacherId and departmentId to the semesterApiUrl// Append teacherId to the departmentApiUrl
   }
+
+  static String get SubjectApiUrl {
+
+    int teacherId = LoginStorageHelper.retrieveId();
+    int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
+    int semesterId = SelectedSemesterIdStore().SelectedSemesterId as int;
+
+    return "$baseurl/api/teacher?teacherid=$teacherId&sem=$semesterId&deptid=$departmentId";
+
+  }
+
 static String  get StudentDataAPiUrl{
 
   int departmentId = SelectedDepartmentIdStore().selectedDepartmentId;
@@ -34,5 +46,22 @@ static String  get StudentDataAPiUrl{
     int departmentId= StudentTabSelectedDepartmentIdStore().selectedDepartmentId;
     return "$baseurl/api/dept/subjects/$departmentId";
    }
+
+
+   static String get getRoutineByTeacher{
+    int? teacherId = LoginStorageHelper.retrieveId();
+    print(teacherId);
+      return "$baseurl/api/classRoutine/getRoutineByTeacher?teacherId=$teacherId";
+   }
+
+
+  static String get fetchRoutine{
+    int? teacherId = LoginStorageHelper.retrieveId();
+    print(teacherId);
+      return "$baseurl/api/classRoutine/getWeeksRoutine?teacherId=$teacherId";
+
+
+  }
+
 }
 
