@@ -295,7 +295,10 @@ import 'package:attendence/view_model/services/AttendenceTabServices/for_Taken_A
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../models/for_attandance_tab/DepartmentModel.dart';
+<<<<<<< HEAD
 import '../../../../../view_model/services/AttendenceTabServices/ForRoutine/RoutineScreenController.dart';
+=======
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/AttendanceDropDownScreenController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/DepartmentController.dart';
 import '../../../../../view_model/services/AttendenceTabServices/for_Dropdown/Controllers/SemesterController.dart';
@@ -310,8 +313,13 @@ import 'AttendanceDropdownWidgets/Widgets/TeacherWiseRoutine.dart';
 
 class AttendanceDropDownScreen extends StatelessWidget {
   final DepartmentController departmentController = Get.put(DepartmentController());
+<<<<<<< HEAD
   final SemestreController semesterController = Get.put(SemestreController());
   final SubjectController subjectController = Get.put(SubjectController());
+=======
+ final SemestreController SemesterController = Get.put(SemestreController());
+ final SubjectController subjectController = Get.put(SubjectController());
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
   final SelectedDepartmentIdStore selectedDepartmentIdStore = SelectedDepartmentIdStore();
   final SelectedSemesterIdStore selectedSemesterIdStore = SelectedSemesterIdStore();
   final SelectedSubjectIdStore selectedSubjectIdStore = SelectedSubjectIdStore();
@@ -361,18 +369,67 @@ class AttendanceDropDownScreen extends StatelessWidget {
                 onChanged: (DepartmentModel? value) async {
                   print("DepartmentDropdownWidget onChanged called with value: $value");
                   if (value != null) {
+
                     selectedDepartmentIdStore.selectedDepartmentId = value.id;
                     log("Selected Department id::${selectedDepartmentIdStore.selectedDepartmentId}");
                     print("Fetching semester and subjects after selecting department ID: ${value.id}");
+<<<<<<< HEAD
                     await semesterController.fetchSemester();
                     // Clear the semester and subject selections when department changes
                     selectedSemesterIdStore.SelectedSemesterId = null;
                     selectedSubjectIdStore.SelectedSubjectId = null;
+=======
+                    await SemesterController.fetchSemester();
+
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
                   }
                 },
               ),
               const SizedBox(height: 20),
+
+
+          Obx(() {
+            if (SemesterController.fetchingSemesterList.isEmpty) {
+              return Container();
+            } else {
+              return DropdownButtonFormField<int>(
+                items: [
+                  DropdownMenuItem<int>(
+                    value: null,
+                    child: Text('Select Semester'),
+                  ),
+                  ...SemesterController.fetchingSemesterList.map((int semesterId) {
+                    return DropdownMenuItem<int>(
+                      value: semesterId,
+                      child: Text('Semester $semesterId'), // Customize your label here
+                    );
+                  }).toList()
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    SemesterController.setSemesterId(value);
+                    selectedSemesterIdStore.SelectedSemesterId = value;
+                    subjectController.fetchSubjects();
+                  }
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Semester',
+                  border: OutlineInputBorder(),
+                ),
+                value: SemesterController.semesterId.value == 0
+                    ? null
+                    : SemesterController.semesterId.value,
+              );
+            }
+          }),
+
+
+
+
+          const SizedBox(height: 20),
+
               Obx(() {
+<<<<<<< HEAD
                 if (semesterController.fetchingSemesterList.isEmpty) {
                   return Container();
                 } else {
@@ -410,6 +467,8 @@ class AttendanceDropDownScreen extends StatelessWidget {
               }),
               const SizedBox(height: 20),
               Obx(() {
+=======
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
                 if (subjectController.subjectList.isEmpty) {
                   return Container();
                 } else {
@@ -434,6 +493,11 @@ class AttendanceDropDownScreen extends StatelessWidget {
                       if (value != null) {
                         subjectController.setSubjectId(value);
                         selectedSubjectIdStore.SelectedSubjectId = value;
+<<<<<<< HEAD
+=======
+
+                        // Show Snackbar with the full subject name
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
                         var selectedSubject = subjectController.subjectList.firstWhere(
                                 (subject) => subject.subjectId == value
                         );
@@ -476,6 +540,10 @@ class AttendanceDropDownScreen extends StatelessWidget {
                   );
                 }
               }),
+
+
+
+
               const SizedBox(height: 258),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import 'package:attendence/res/Colors/AppColors.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
@@ -89,6 +90,8 @@
 
 
 import 'package:attendence/res/AppUrl/AppUrl.dart';
+=======
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
 import 'package:attendence/res/Colors/AppColors.dart';
 import 'package:attendence/view_model/services/Login_Services/Login_Helper_Function/AuthariizationHeader.dart';
 import 'package:flutter/material.dart';
@@ -99,15 +102,21 @@ import 'dart:convert';
 import '../../../models/for_attandance_tab/TeacherWiseRoutineModel.dart';
 import '../Login_Services/Login_Helper_Function/Login_Storage_Helper.dart';
 import '../HolidayServices/HolidayChecker.dart';
+<<<<<<< HEAD
 import 'nextdayHolidayServicess.dart';
 
+=======
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
 
 class HomeController extends GetxController {
   String? name = LoginStorageHelper.retrieveName();
   RxString greeting = ''.obs;
   RxList<Map<String, String>> holidays = <Map<String, String>>[].obs;
+<<<<<<< HEAD
   RxList<Schedule> schedules = <Schedule>[].obs; // List of Schedule objects
   RxBool isHolidayTomorrow = false.obs;
+=======
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
 
   var tomorrowHolidayReasons = ''.obs;
   @override
@@ -115,12 +124,17 @@ class HomeController extends GetxController {
     super.onInit();
     _updateGreeting();
     fetchingAllHolidays();
+<<<<<<< HEAD
     fetchSchedule();
     checkForTomorrowHoliday();
+=======
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
   }
 
   void _updateGreeting() {
-    final hour = DateTime.now().hour;
+    final hour = DateTime
+        .now()
+        .hour;
 
     if (hour >= 6 && hour < 12) {
       greeting.value = 'Good Morning\n$name';
@@ -135,7 +149,12 @@ class HomeController extends GetxController {
 
   Future<void> fetchingAllHolidays() async {
     try {
+<<<<<<< HEAD
       final holidaysList = await HolidayChecker.fetchingAllHolidays();
+=======
+      final holidaysList = await HolidayChecker
+          .fetchingAllHolidays(); // Fetch all holidays
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
       holidays.value = holidaysList.map((holiday) {
         return {
           'reason': holiday['reason']!,
@@ -146,6 +165,7 @@ class HomeController extends GetxController {
     } catch (e) {
       print('Failed to fetch holidays: $e');
       holidays.value = [];
+<<<<<<< HEAD
     }
   }
 
@@ -237,6 +257,8 @@ class HomeController extends GetxController {
       }
     } catch (e) {
       print('Error fetching schedule: $e');
+=======
+>>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
     }
   }
 
