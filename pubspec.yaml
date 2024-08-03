@@ -39,13 +39,7 @@ dependencies:
   get: ^4.6.6
   get_storage: ^2.1.1
   get_it: ^7.7.0
-<<<<<<< HEAD
-  marquee: ^2.2.3
-  fading_edge_scrollview: ^3.0.0
-  text_marquee: ^0.0.2
   auto_scroll_text: ^0.0.7
-=======
->>>>>>> dfb3e6faf40997956022e5b50d9afe99178b9a7f
 #PROJECT SPECIFIC
 
 #-----------------------./PACKAGES END-------------------------#
